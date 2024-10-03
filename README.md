@@ -164,15 +164,18 @@
   ```bash
   cd spectre-insights
 
+
 2. **Build and Start Containers**
 
   ```bash
   docker-compose up --build
 
+
 - This command will build the Docker images for both the frontend and backend, along with the MongoDB service, and start the containers.
 
 3. **Access the Application**
 
--Frontend: ```http://localhost:3000
--Backend API: ```http://localhost:5000
--Strapi CMS: ```http://localhost:1337/admin
+  ```bash
+  Frontend: http://localhost:3000
+  Backend API: http://localhost:5000
+  Strapi CMS: http://localhost:1337/admin
