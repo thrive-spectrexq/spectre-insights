@@ -1,24 +1,21 @@
 # Node modules
-node_modules/
+**/node_modules
 
 # Logs
-logs/
+logs
 *.log
 npm-debug.log*
 
-# Env files
-.env
+# Environment variables
+**/.env
 
 # Build directories
-dist/
-build/
+frontend/.nuxt
+frontend/.output
+backend/dist
 
-# Docker files
-docker/*.log
-
-# IDEs
-.vscode/
-.idea/
-
-# OS
+# OS files
 .DS_Store
+
+# Docker
+docker-compose.override.yml
