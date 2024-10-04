@@ -10,16 +10,27 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.5.5",
+    "@sidebase/nuxt-auth": "^0.9.3",
     "@vee-validate/rules": "^4.13.2",
-    "nuxt": "^3.13.0",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
+    "axios": "^1.7.7",
+    "nuxt": "^3.13.2",
     "pinia": "^2.0.0",
     "vee-validate": "^4.13.2",
     "vue": "^3.2.0",
     "vue-router": "^4.0.0"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/jest": "^29.5.13",
+    "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.20",
+    "jest": "^29.7.0",
     "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13"
+    "tailwindcss": "^3.4.13",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.2"
   }
 }
