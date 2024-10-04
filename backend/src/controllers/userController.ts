@@ -1,87 +1,77 @@
 // backend/src/controllers/userController.ts
-import { Request, Response } from 'express'
-import User from '../models/User'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import { Request, Response, NextFunction } from 'express';
+import User, { IUserDocument } from '../models/User';
+import jwt from 'jsonwebtoken';
+import config from '../config';
 
-export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body
-
+// Registration Handler
+export const registerUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
-    const existingUser = await User.findOne({ email })
+    const { name, email, password } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' })
+      res.status(400).json({ message: 'User already exists' });
+      return;
     }
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
-
-    const user = new User({
+    // Create new user
+    const newUser: IUserDocument = new User({
       name,
       email,
-      password: hashedPassword,
-    })
+      password,
+    });
 
-    await user.save()
+    await newUser.save();
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
-      expiresIn: '1h',
-    })
-
-    res.status(201).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    })
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' })
+    next(error); // Pass error to Express error handler
   }
-}
+};
 
-export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body
-
+// Login Handler
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
-    const user = await User.findOne({ email })
+    const { email, password } = req.body;
+
+    // Find user by email
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' })
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
     }
 
-    const isMatch = await bcrypt.compare(password, user.password)
+    // Compare passwords using instance method
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' })
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
-      expiresIn: '1h',
-    })
-
-    res.json({
-      token,
+    // Create JWT payload
+    const payload = {
       user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
+        id: user.id,
       },
-    })
+    };
+
+    // Sign token
+    const token = jwt.sign(payload, config.jwt.secret, {
+      expiresIn: config.jwt.expiresIn,
+    });
+
+    res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' })
+    next(error); // Pass error to Express error handler
   }
-}
-
-export const getUserProfile = async (req: Request, res: Response) => {
-  const user = req.user
-
-  if (user) {
-    res.json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-    })
-  } else {
-    res.status(404).json({ message: 'User not found' })
-  }
-}
+};

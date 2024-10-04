@@ -1,12 +1,13 @@
 // backend/src/routes/userRoutes.ts
-import express from 'express'
-import { registerUser, loginUser, getUserProfile } from '../controllers/userController'
-import { protect } from '../middlewares/authMiddleware'
+import { Router } from 'express';
+import { registerUser, loginUser } from '../controllers/userController';
 
-const router = express.Router()
+const router = Router();
 
-router.post('/register', registerUser)
-router.post('/login', loginUser)
-router.get('/profile', protect, getUserProfile)
+// Route: POST /api/users/register
+router.post('/register', registerUser);
 
-export default router
+// Route: POST /api/users/login
+router.post('/login', loginUser);
+
+export default router;
