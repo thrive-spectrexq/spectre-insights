@@ -20,12 +20,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useUserStore } from '~/stores/user'
-import { useAuth } from '@sidebase/nuxt-auth'
+//import { useAuth } from '@sidebase/nuxt-auth'
 import { useRouter } from 'vue-router'
 import SectionHeader from '~/components/common/SectionHeader.vue'
 
 const userStore = useUserStore()
-const auth = useAuth()
+//const auth = useAuth()
 const router = useRouter()
 
 const handleLogout = async () => {

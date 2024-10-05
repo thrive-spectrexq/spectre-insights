@@ -56,13 +56,13 @@
   <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { useAuth } from '@sidebase/nuxt-auth'
+  //import { useAuth } from '@sidebase/nuxt-auth'
   import { useUserStore } from '~/stores/user'
   import { Form, Field, ErrorMessage } from 'vee-validate'
   import * as yup from 'yup'
   
   const router = useRouter()
-  const auth = useAuth()
+  //const auth = useAuth()
   const userStore = useUserStore()
   
   const error = ref<string | null>(null)
