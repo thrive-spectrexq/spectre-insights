@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuth } from '@sidebase/nuxt-auth'
+//import { useAuth } from '@sidebase/nuxt-auth'
 import { useRouter } from 'vue-router'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
@@ -110,7 +110,7 @@ const { handleSubmit, errors, values, isSubmitting, resetForm } = useForm({
 })
 
 // Access authentication composable and router
-const auth = useAuth()
+//const auth = useAuth()
 const router = useRouter()
 
 // Reactive variables for status messages

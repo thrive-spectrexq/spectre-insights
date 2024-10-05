@@ -7,10 +7,10 @@
   </template>
   
   <script setup lang="ts">
-  import { useAuth } from '@sidebase/nuxt-auth'
+  //import { useAuth } from '@sidebase/nuxt-auth'
   import { useRouter } from 'vue-router'
   
-  const auth = useAuth()
+  //const auth = useAuth()
   const router = useRouter()
   
   const handleLogout = async () => {

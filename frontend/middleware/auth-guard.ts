@@ -1,9 +1,9 @@
 // frontend/middleware/auth-guard.ts
 import { defineNuxtRouteMiddleware, navigateTo } from '#app'
-import { useAuth } from '@sidebase/nuxt-auth'
+//import { useAuth } from '@sidebase/nuxt-auth'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const auth = useAuth()
+  //  const auth = useAuth()
 
   try {
     // Check if the user is authenticated

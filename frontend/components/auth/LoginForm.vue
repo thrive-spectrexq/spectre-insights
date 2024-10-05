@@ -36,7 +36,7 @@
   
   <script setup lang="ts">
   import { ref } from 'vue'
-  import { useAuth } from '@sidebase/nuxt-auth'
+  //import { useAuth } from '@sidebase/nuxt-auth'
   import { useRouter } from 'vue-router'
   import { useForm, useField, ErrorMessage } from 'vee-validate'
   import * as yup from 'yup'
@@ -50,7 +50,7 @@
     validationSchema: schema,
   })
   
-  const auth = useAuth()
+  //const auth = useAuth()
   const router = useRouter()
   
   const form = ref({
