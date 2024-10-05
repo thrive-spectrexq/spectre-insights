@@ -1,23 +1,30 @@
 // frontend/plugins/auth.ts
+
 import { defineNuxtPlugin } from '#app'
-import { useAuth } from '@sidebase/nuxt-auth'
-import { useUserStore } from '~/stores/user'
+import { useAuth as useSidebaseAuth } from '@sidebase/nuxt-auth'
 
-export default defineNuxtPlugin(() => {
-  const auth = useAuth()
-  const userStore = useUserStore()
+export default defineNuxtPlugin((nuxtApp) => {
+    const auth = useSidebaseAuth()
 
-  // Watch for authentication state changes
-  auth.onAuthStateChange((event, session) => {
-    if (session?.user) {
-      userStore.setUser(session.user)
-    } else {
-      userStore.clearUser()
+    // Extend the auth composable with an updateProfile method
+    const updateProfile = async (data: { name: string; email: string; password?: string }) => {
+        try {
+            // Assuming your backend has an endpoint to update user profiles
+            const response = await nuxtApp.$axios.put('/user/profile', data)
+            // Refresh the auth state to get updated user data
+            await auth.refreshUser()
+            return response.data
+        } catch (error) {
+            throw error
+        }
     }
-  })
 
-  // Initialize user state on app start
-  if (auth.session?.user) {
-    userStore.setUser(auth.session.user)
-  }
+    return {
+        provide: {
+            auth: {
+                ...auth,
+                updateProfile,
+            },
+        },
+    }
 })

@@ -1,23 +1,16 @@
 <!-- frontend/layouts/default.vue -->
 <template>
-    <div class="flex flex-col min-h-screen">
-      <Navbar />
-      <NuxtRouteAnnouncer />
-  
-      <main class="flex-grow">
-        <NuxtPage />
-      </main>
-  
-      <Footer />
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import Navbar from '~/components/common/Navbar.vue'
-  import Footer from '~/components/common/Footer.vue'
-  </script>
-  
-  <style scoped>
-  /* Add any layout-specific styles here */
-  </style>
-  
+  <div>
+    <Navbar />
+    <NuxtPage />
+    <Footer />
+  </div>
+</template>
+
+<script setup lang="ts">
+// No additional script needed for now
+</script>
+
+<style scoped>
+/* Add any layout-specific styles here */
+</style>

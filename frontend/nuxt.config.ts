@@ -1,11 +1,11 @@
 // frontend/nuxt.config.ts
-import { defineNuxtConfig } from 'nuxt'
+import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
+  compatibilityDate: '2024-10-05',
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/axios',
     '@sidebase/nuxt-auth',
   ],
   build: {
@@ -17,11 +17,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       axios: {
-        apiBase: process.env.API_BASE || 'http://localhost:5000/api',
+        apiBase: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:5000/api',
       },
-      auth: {
-        secret: process.env.AUTH_SECRET || 'your-auth-secret',
+      strapi: {
+        baseURL: process.env.NUXT_PUBLIC_STRAPI_URL || 'http://localhost:1337/api',
       },
+      // Removed auth.secret from public
     },
     auth: {
       secret: process.env.AUTH_SECRET || 'your-auth-secret',
@@ -31,6 +32,12 @@ export default defineNuxtConfig({
     strict: true,
   },
   plugins: [
-    '~/plugins/auth.ts', // Ensure this is present
+    '~/plugins/axios.ts',
   ],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
 })

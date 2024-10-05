@@ -1,12 +1,12 @@
 // frontend/stores/user.ts
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import { useNuxtApp } from '#app'
 
 interface UserProfile {
   id: string
   name: string
   email: string
-  // Add more fields as necessary
+  // Add more fields as needed
 }
 
 export const useUserStore = defineStore('user', {
@@ -15,20 +15,19 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     async fetchUserProfile() {
+      const { $axios } = useNuxtApp()
       try {
-        const response = await axios.get('/api/user/profile') // Adjust the endpoint
+        const response = await $axios.get('/user/profile') // Adjust the endpoint as needed
         this.profile = response.data
       } catch (error) {
         console.error('Error fetching user profile:', error)
       }
     },
-    async updateUserProfile(updatedProfile: Partial<UserProfile>) {
-      try {
-        const response = await axios.put('/api/user/profile', updatedProfile) // Adjust the endpoint
-        this.profile = response.data
-      } catch (error) {
-        console.error('Error updating user profile:', error)
-      }
+    setUserProfile(profile: UserProfile) {
+      this.profile = profile
+    },
+    clearUserProfile() {
+      this.profile = null
     },
   },
 })
