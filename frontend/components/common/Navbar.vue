@@ -13,7 +13,7 @@
             <nuxt-link to="/blog" class="hover:text-blue-300">Blog</nuxt-link>
           </li>
           <li>
-            <nuxt-link to="/blog" class="hover:text-blue-300">Products</nuxt-link>
+            <nuxt-link to="/products" class="hover:text-blue-300">Products</nuxt-link>
           </li>
           <li>
             <nuxt-link to="/services" class="hover:text-blue-300">Services</nuxt-link>

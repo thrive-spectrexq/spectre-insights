@@ -20,7 +20,8 @@
     "axios-retry": "^4.5.0",
     "nuxt": "^3.13.2",
     "pinia": "^2.0.0",
-    "vee-validate": "^4.13.2"
+    "vee-validate": "^4.13.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
