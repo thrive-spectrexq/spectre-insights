@@ -1,8 +1,8 @@
+<!-- frontend/app.vue -->
 <template>
   <div>
     <Navbar />
     <NuxtRouteAnnouncer />
-    <NuxtWelcome />
     <NuxtPage />
     <Footer />
   </div>

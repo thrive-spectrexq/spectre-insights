@@ -10,6 +10,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.5",
     "@sidebase/nuxt-auth": "^0.9.3",
     "@vee-validate/rules": "^4.13.2",
@@ -18,9 +20,7 @@
     "axios": "^1.7.7",
     "nuxt": "^3.13.2",
     "pinia": "^2.0.0",
-    "vee-validate": "^4.13.2",
-    "vue": "^3.2.0",
-    "vue-router": "^4.0.0"
+    "vee-validate": "^4.13.2"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
