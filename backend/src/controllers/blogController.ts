@@ -18,7 +18,7 @@ export const createBlog = asyncHandler(async (req: Request, res: Response, next:
     const blog = new Blog({
         title,
         content,
-        author: req.user._id, // Assuming req.user is populated by auth middleware
+        author: req.user, // Assuming req.user is populated by auth middleware
         category,
         tags,
         coverImage,
@@ -80,7 +80,7 @@ export const deleteBlog = asyncHandler(async (req: Request, res: Response, next:
     const blog = await Blog.findById(req.params.id);
 
     if (blog) {
-        await blog.remove();
+        await blog.deleteOne();
         res.json({ message: 'Blog post removed' });
     } else {
         res.status(404);

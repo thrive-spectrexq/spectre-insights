@@ -1,28 +1,11 @@
-// backend/src/routes/userRoutes.ts
+import { Router } from 'express';
+import { registerUser, loginUser, getUserProfile } from '../controllers/userController';
+import { authMiddleware } from '../middlewares/authMiddleware'; // Adjust import according to your structure
 
-import express from 'express';
-import {
-    registerUser,
-    loginUser,
-    getUserProfile,
-    updateUserProfile,
-    getAllUsers,
-    deleteUser,
-} from '../controllers/userController';
-import { authenticate, authorize } from '../middlewares/authorize';
+const router = Router();
 
-const router = express.Router();
-
-// Public Routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-
-// Protected Routes
-router.get('/profile', authenticate, getUserProfile);
-router.put('/profile', authenticate, updateUserProfile);
-
-// Admin Routes
-router.get('/', authenticate, authorize('admin'), getAllUsers);
-router.delete('/:id', authenticate, authorize('admin'), deleteUser);
+router.get('/profile', authMiddleware(), getUserProfile); // Ensure authMiddleware returns a valid middleware function
 
 export default router;

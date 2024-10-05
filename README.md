@@ -45,7 +45,7 @@
 
 - **Admin Authentication:** Secure login with role-based access control and optional two-factor authentication.
 - **Admin Dashboard:** Overview of website statistics and quick access to manage content.
-- **Content Management:** CRUD operations for blog posts, services, products via Strapi CMS.
+- **Content Management:** CRUD operations for blog posts, services, products.
 - **User Management:** View and manage registered users, roles, and permissions.
 - **Analytics and Reporting:** Traffic analysis, user engagement metrics, and sales reports.
 - **Site Settings:** Manage website configurations, contact information, and SEO settings.

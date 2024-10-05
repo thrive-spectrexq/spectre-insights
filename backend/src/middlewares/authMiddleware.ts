@@ -1,39 +1,27 @@
-// backend/src/middlewares/authMiddleware.ts
-
+// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User, { IUser } from '../models/User';
-import config from '../config'; // Ensure this path is correct
+import config from '../config';
 
-interface AuthRequest extends Request {
-  user?: IUser;
-}
+// General authentication middleware
+export const authMiddleware = (roleRequired: 'user' | 'admin' = 'user') => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) return res.status(403).json({ message: 'No token provided.' });
 
-export const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
-  let token;
+    jwt.verify(token, config.jwt.secret, (err: any, decoded: any) => {
+      if (err) return res.status(401).json({ message: 'Unauthorized!' });
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    try {
-      // Get token from header
-      token = req.headers.authorization.split(' ')[1];
+      // Attach user info to the request
+      req.body.userId = decoded.id;
+      req.body.role = decoded.role; // Assuming role is included in the JWT payload
 
-      // Verify token
-      const decoded: any = jwt.verify(token, config.jwt.secret);
-
-      // Get user from the token
-      req.user = await User.findById(decoded.id).select('-password');
+      // Role-based access control
+      if (roleRequired === 'admin' && req.body.role !== 'admin') {
+        return res.status(403).json({ message: 'Admin access required.' });
+      }
 
       next();
-    } catch (error) {
-      console.error(error);
-      res.status(401).json({ message: 'Not authorized, token failed' });
-    }
-  }
-
-  if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' });
-  }
+    });
+  };
 };
