@@ -7,8 +7,9 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
 import userRoutes from './routes/userRoutes';
+import blogRoutes from './routes/blogRoutes'; // Import blog routes
 import { errorHandler } from './middlewares/errorHandler';
-import config from './config'; 
+import config from './config';
 import logger from './utils/logger'; // Import logger
 
 const app: Application = express();
@@ -18,9 +19,9 @@ app.use(helmet());
 
 // 2. Rate Limiting Middleware
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    message: 'Too many requests from this IP, please try again later.',
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
 });
 app.use(limiter);
 
@@ -32,6 +33,7 @@ app.use(express.json());
 
 // 5. Routes
 app.use('/api/users', userRoutes);
+app.use('/api/blogs', blogRoutes); // Use blog routes
 
 // 6. Root Route
 app.get('/', (req: Request, res: Response) => {

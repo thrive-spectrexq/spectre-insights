@@ -1,77 +1,137 @@
 // backend/src/controllers/userController.ts
+
 import { Request, Response, NextFunction } from 'express';
-import User, { IUserDocument } from '../models/User';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import config from '../config';
+import User, { IUser } from '../models/User'; // Ensure this path is correct
+import config from '../config'; // Ensure this path is correct
 
-// Registration Handler
-export const registerUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+// Utility function to generate JWT Token
+const generateToken = (user: IUser) => {
+  return jwt.sign(
+    { id: user._id, email: user.email },
+    config.jwt.secret,
+    { expiresIn: '30d' } // Token validity
+  );
+};
+
+// @desc    Register a new user
+// @route   POST /api/users/register
+// @access  Public
+export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
+  const { name, email, password } = req.body;
+
   try {
-    const { name, email, password } = req.body;
-
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      res.status(400).json({ message: 'User already exists' });
-      return;
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      res.status(400);
+      return res.json({ message: 'User already exists' });
     }
 
-    // Create new user
-    const newUser: IUserDocument = new User({
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create user
+    const user = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
     });
 
-    await newUser.save();
-
-    res.status(201).json({ message: 'User registered successfully' });
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user),
+      });
+    } else {
+      res.status(400);
+      return res.json({ message: 'Invalid user data' });
+    }
   } catch (error) {
-    next(error); // Pass error to Express error handler
+    next(error);
   }
 };
 
-// Login Handler
-export const loginUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { email, password } = req.body;
+// @desc    Authenticate user & get token
+// @route   POST /api/users/login
+// @access  Public
+export const authUser = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
 
+  try {
     // Find user by email
     const user = await User.findOne({ email });
-    if (!user) {
-      res.status(400).json({ message: 'Invalid credentials' });
-      return;
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user),
+      });
+    } else {
+      res.status(401);
+      return res.json({ message: 'Invalid email or password' });
     }
-
-    // Compare passwords using instance method
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      res.status(400).json({ message: 'Invalid credentials' });
-      return;
-    }
-
-    // Create JWT payload
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    // Sign token
-    const token = jwt.sign(payload, config.jwt.secret, {
-      expiresIn: config.jwt.expiresIn,
-    });
-
-    res.status(200).json({ token });
   } catch (error) {
-    next(error); // Pass error to Express error handler
+    next(error);
+  }
+};
+
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
+export const getUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Assuming that authentication middleware sets req.user
+    const user = await User.findById(req.user?.id).select('-password');
+
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404);
+      return res.json({ message: 'User not found' });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+export const updateUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const user = await User.findById(req.user?.id);
+
+    if (user) {
+      user.name = name || user.name;
+      user.email = email || user.email;
+
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+      }
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        token: generateToken(updatedUser),
+      });
+    } else {
+      res.status(404);
+      return res.json({ message: 'User not found' });
+    }
+  } catch (error) {
+    next(error);
   }
 };

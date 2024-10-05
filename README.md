@@ -35,7 +35,7 @@
 
 - **Homepage:** Overview of Spectre Insights with highlights of services, products, and featured blog posts.
 - **Services Page:** Detailed descriptions of services offered with pricing and testimonials.
-- **Blog:** Dynamic blog section managed via Strapi CMS with categories, tags, and search functionality.
+- **Blog:** Dynamic blog section managed via the admin panel with categories, tags, and search functionality.
 - **About Page:** Company history, mission, team profiles, and contact information.
 - **Product Page:** Showcase of products with detailed descriptions, pricing, and user reviews.
 - **Contact Page:** Contact form, contact details, and interactive map integration.
@@ -120,18 +120,16 @@
 
   ```bash
   PORT=5000
-  MONGODB_URI=your_mongodb_uri
+  MONGODB_URI=mongodb://mongo:27017/spectre
   JWT_SECRET=your_jwt_secret
-  STRAPI_API_URL=http://localhost:1337
-  EMAIL_SERVICE=SendGrid
-  EMAIL_USER=your_sendgrid_username
-  EMAIL_PASS=your_sendgrid_password
+  EMAIL_SERVICE_API=SendGrid_api
+  NODE_ENV=development
+
 
 - **Frontend** .env
 
   ```bash
   NUXT_PUBLIC_API_URL=http://localhost:5000/api
-  NUXT_PUBLIC_STRAPI_URL=http://localhost:1337
 
 ### Running the Application
 
@@ -177,5 +175,4 @@
 
   ```bash
   Frontend: http://localhost:3000
-  Backend API: http://localhost:5000
-  Strapi CMS: http://localhost:1337/admin
+  Backend API: http://localhost:5000/api
