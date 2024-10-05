@@ -1,14 +1,17 @@
 <!-- frontend/layouts/default.vue -->
 <template>
-  <div>
+  <div class="flex flex-col min-h-screen">
     <Navbar />
-    <NuxtPage />
+    <main class="flex-grow">
+      <slot />
+    </main>
     <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
-// No additional script needed for now
+import Navbar from '~/components/common/Navbar.vue'
+import Footer from '~/components/common/Footer.vue'
 </script>
 
 <style scoped>

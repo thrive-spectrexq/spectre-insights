@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
-    //    '@sidebase/nuxt-auth',
+    //'@sidebase/nuxt-auth',
   ],
   build: {
     transpile: [],

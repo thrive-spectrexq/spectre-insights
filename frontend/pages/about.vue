@@ -1,3 +1,11 @@
+<!-- frontend/pages/about.vue -->
+<template>
+  <div>
+    <SectionHeader title="About Us" />
+    <p>Learn more about Spectre Insights, our mission, values, and the team dedicated to providing top-notch analytics and insights.</p>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import SectionHeader from '~/components/common/SectionHeader.vue'
