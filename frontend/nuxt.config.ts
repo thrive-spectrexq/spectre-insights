@@ -4,28 +4,26 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   compatibilityDate: '2024-10-05',
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
-    //'@sidebase/nuxt-auth',
+    'vue-toastification/nuxt',
   ],
   build: {
     transpile: [],
   },
   css: [
+    'leaflet/dist/leaflet.css',
     '@/assets/css/tailwind.css',
   ],
   runtimeConfig: {
-    public: {
-      axios: {
-        apiBase: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:5000/api',
-      },
-      strapi: {
-        baseURL: process.env.NUXT_PUBLIC_STRAPI_URL || 'http://localhost:1337/api',
-      },
-      // Removed auth.secret from public
+    axios: {
+      proxy: true,
+      credentials: true,
     },
-    auth: {
-      secret: process.env.AUTH_SECRET || 'your-auth-secret',
+    proxy: {
+      '/api/': { target: 'http://localhost:5000', pathRewrite: { '^/api/': '/api/' } },
     },
   },
   typescript: {
@@ -33,6 +31,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     '~/plugins/axios.ts',
+    '~/plugins/auth.ts'
   ],
   postcss: {
     plugins: {

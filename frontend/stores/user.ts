@@ -1,33 +1,89 @@
 // frontend/stores/user.ts
-import { defineStore } from 'pinia'
-import { useNuxtApp } from '#app'
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import axios from 'axios';
 
-interface UserProfile {
-  id: string
-  name: string
-  email: string
-  // Add more fields as needed
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'user' | 'admin';
 }
 
-export const useUserStore = defineStore('user', {
-  state: () => ({
-    profile: null as UserProfile | null,
-  }),
-  actions: {
-    async fetchUserProfile() {
-      const { $axios } = useNuxtApp()
-      try {
-        const response = await $axios.get('/user/profile') // Adjust the endpoint as needed
-        this.profile = response.data
-      } catch (error) {
-        console.error('Error fetching user profile:', error)
-      }
-    },
-    setUserProfile(profile: UserProfile) {
-      this.profile = profile
-    },
-    clearUserProfile() {
-      this.profile = null
-    },
-  },
-})
+export const useUserStore = defineStore('user', () => {
+  const user = ref<User | null>(null);
+  const token = ref<string | null>(null);
+  const loading = ref<boolean>(false);
+  const error = ref<string | null>(null);
+
+  // Signup
+  const signup = async (name: string, email: string, password: string) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await axios.post(`${process.env.API_BASE_URL}/users/register`, {
+        name,
+        email,
+        password,
+      });
+      token.value = response.data.token;
+      // Optionally, decode token to get user info or fetch user profile
+    } catch (err: any) {
+      error.value = err.response?.data?.message || 'Signup failed';
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Signin
+  const signin = async (email: string, password: string) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await axios.post(`${process.env.API_BASE_URL}/users/login`, {
+        email,
+        password,
+      });
+      token.value = response.data.token;
+      // Optionally, decode token to get user info or fetch user profile
+    } catch (err: any) {
+      error.value = err.response?.data?.message || 'Signin failed';
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Signout
+  const signout = () => {
+    user.value = null;
+    token.value = null;
+    // Optionally, clear tokens from storage
+  };
+
+  // Fetch User Profile
+  const fetchUserProfile = async () => {
+    if (!token.value) return;
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await axios.get(`${process.env.API_BASE_URL}/users/profile`);
+      user.value = response.data;
+    } catch (err: any) {
+      error.value = err.response?.data?.message || 'Failed to fetch profile';
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    user,
+    token,
+    loading,
+    error,
+    signup,
+    signin,
+    signout,
+    fetchUserProfile,
+  };
+});
+

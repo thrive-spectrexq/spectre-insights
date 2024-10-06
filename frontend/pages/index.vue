@@ -1,23 +1,21 @@
-<!-- frontend/pages/index.vue -->
 <template>
   <div>
     <HeroSection />
-    <CallToAction />
+    <ServicesOverview />
+    <Testimonials />
+    <LatestBlogPosts />
+    <CTASection />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import HeroSection from '~/components/public/HeroSection.vue'
-import CallToAction from '~/components/public/CallToAction.vue'
-import { useApi } from '~/server/api' // Assuming you have a centralized API service
-
-onMounted(async () => {
-  // Since we are removing services, products, and featured posts,
-  // we don't need to fetch them anymore.
-})
+import HeroSection from '~/components/HeroSection.vue';
+import ServicesOverview from '~/components/ServicesOverview.vue';
+import Testimonials from '~/components/Testimonials.vue';
+import LatestBlogPosts from '~/components/LatestBlogPosts.vue';
+import CTASection from '~/components/CTASection.vue';
 </script>
 
 <style scoped>
-/* Add any page-specific styles here */
+/* Add any additional styles if necessary */
 </style>

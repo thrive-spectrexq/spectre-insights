@@ -1,62 +1,42 @@
-<!-- frontend/pages/products.vue -->
+<!-- pages/products.vue -->
 <template>
-  <div class="container mx-auto py-8 px-4">
-    <SectionHeader title="Our Products" />
-
-    <!-- Loading state -->
-    <div v-if="loading" class="text-center text-xl">
-      Loading products...
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Our Products</h1>
+    <div v-if="loading" class="text-center">
+      <p>Loading products...</p>
     </div>
-
-    <!-- Error state -->
-    <div v-if="error" class="text-center text-red-600">
-      {{ error }}
+    <div v-else-if="error" class="text-center text-red-500">
+      <p>{{ error }}</p>
     </div>
-
-    <!-- Products grid -->
-    <div v-if="!loading && !error" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-      <ProductCard
-        v-for="product in products"
-        :key="product.id"
-        :product="product"
-      />
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="product in products" :key="product.id" class="border rounded-lg p-4 shadow">
+        <h2 class="text-xl font-semibold mb-2">{{ product.name }}</h2>
+        <p class="mb-2">{{ product.description }}</p>
+        <p class="font-bold mb-2">Price: ${{ product.price }}</p>
+        <div>
+          <h3 class="font-semibold">Reviews:</h3>
+          <ul class="list-disc list-inside">
+            <li v-for="(review, index) in product.reviews" :key="index">{{ review }}</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import SectionHeader from '~/components/common/SectionHeader.vue'
-import ProductCard from '~/components/public/ProductCard.vue'
+import { onMounted } from 'vue';
+import { useProductsStore } from '~/stores/products';
 
-interface Product {
-  id: number
-  name: string
-  price: number
-  image: string
-}
+const productsStore = useProductsStore();
 
-const products = ref<Product[]>([])
-const loading = ref(true)
-const error = ref<string | null>(null)
+const { products, loading, error, fetchProducts } = productsStore;
 
-// Access the custom Axios instance
-const { $axios } = useNuxtApp()
-
-onMounted(async () => {
-  try {
-    // Fetch all products from backend or Strapi
-    const productsRes = await $axios.get('/products')
-    products.value = productsRes.data
-  } catch (err) {
-    error.value = 'Error fetching products. Please try again later.'
-    console.error('Error fetching products:', err)
-  } finally {
-    loading.value = false
-  }
-})
+onMounted(() => {
+  fetchProducts();
+});
 </script>
 
 <style scoped>
-/* Add any component-specific styles here */
+/* Add any additional styling here */
 </style>

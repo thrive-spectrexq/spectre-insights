@@ -1,16 +1,25 @@
 <!-- frontend/app.vue -->
+
 <template>
-  <NuxtLayout>
-    <NuxtRouteAnnouncer />
-    <NuxtPage />
-  </NuxtLayout>
+  <NuxtPage />
 </template>
+
+<script setup lang="ts">
+import { useAuthStore } from '~/stores/auth';
+
+const authStore = useAuthStore();
+
+// Fetch user profile on app mount
+if (authStore.token) {
+  authStore.fetchUserProfile();
+}
+</script>
 
 <script setup lang="ts">
 // Import global styles
 import '~/assets/css/tailwind.css'
 </script>
 
-<style scoped>
-/* Add any global styles here */
+<style>
+/* Global styles if any */
 </style>

@@ -1,57 +1,42 @@
-<!-- pages/services.vue -->
+<!-- frontend/pages/services.vue -->
 <template>
-    <div>
-      <SectionHeader title="Our Services" />
-      <div class="container mx-auto py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <ServiceDetailCard v-for="service in services" :key="service.id" :service="service" />
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Our Services</h1>
+    <div v-if="loading" class="text-center">
+      <p>Loading services...</p>
+    </div>
+    <div v-else-if="error" class="text-center text-red-500">
+      <p>{{ error }}</p>
+    </div>
+    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="service in services" :key="service.id" class="border rounded-lg p-4 shadow">
+        <h2 class="text-xl font-semibold mb-2">{{ service.title }}</h2>
+        <p class="mb-2">{{ service.description }}</p>
+        <p class="font-bold mb-2">Price: ${{ service.price }}</p>
+        <div>
+          <h3 class="font-semibold">Testimonials:</h3>
+          <ul class="list-disc list-inside">
+            <li v-for="(testimonial, index) in service.testimonials" :key="index">{{ testimonial }}</li>
+          </ul>
         </div>
       </div>
-      <TestimonialsSection :testimonials="testimonials" />
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import SectionHeader from '~/components/common/SectionHeader.vue'
-  import ServiceDetailCard from '~/components/public/ServiceDetailCard.vue'
-  import TestimonialsSection from '~/components/public/TestimonialsSection.vue'
-  import axios from 'axios'
-  
-  interface Service {
-    id: number
-    title: string
-    description: string
-    price: number
-  }
-  
-  interface Testimonial {
-    id: number
-    name: string
-    position: string
-    message: string
-    avatar: string
-  }
-  
-  const services = ref<Service[]>([])
-  const testimonials = ref<Testimonial[]>([])
-  
-  onMounted(async () => {
-    try {
-      // Fetch services from backend
-      const servicesRes = await axios.get(`${process.env.NUXT_PUBLIC_API_URL}/services`)
-      services.value = servicesRes.data
-  
-      // Fetch testimonials from backend or Strapi
-      const testimonialsRes = await axios.get(`${process.env.NUXT_PUBLIC_API_URL}/testimonials`)
-      testimonials.value = testimonialsRes.data
-    } catch (error) {
-      console.error('Error fetching services or testimonials:', error)
-    }
-  })
-  </script>
-  
-  <style scoped>
-  /* Add any page-specific styles here */
-  </style>
-  
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { useServicesStore } from '~/stores/services';
+
+const servicesStore = useServicesStore();
+
+const { services, loading, error, fetchServices } = servicesStore;
+
+onMounted(() => {
+  fetchServices();
+});
+</script>
+
+<style scoped>
+/* Add any additional styling here */
+</style>

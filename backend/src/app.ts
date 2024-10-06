@@ -8,6 +8,10 @@ import rateLimit from 'express-rate-limit';
 
 import userRoutes from './routes/userRoutes';
 import blogRoutes from './routes/blogRoutes'; // Import blog routes
+import servicesRoutes from './routes/servicesRoutes';
+import productRoutes from './routes/productRoutes';
+import contactRoutes from './routes/contactRoutes';
+import testimonialRoutes from './routes/testimonialRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import config from './config';
 import logger from './utils/logger'; // Import logger
@@ -33,7 +37,11 @@ app.use(express.json());
 
 // 5. Routes
 app.use('/api/users', userRoutes);
-app.use('/api/blogs', blogRoutes); // Use blog routes
+app.use('/api/blogs', blogRoutes);
+app.use('/api/services', servicesRoutes); // Use services routes
+app.use('/api/products', productRoutes); // Assuming you have product routes
+app.use('/api/contact', contactRoutes);
+app.use('/api/testimonials', testimonialRoutes);
 
 // 6. Root Route
 app.get('/', (req: Request, res: Response) => {

@@ -13,8 +13,15 @@ const config = {
     secret: process.env.JWT_SECRET || 'your_jwt_secret', // Use a strong secret in production
   },
   emailService: {
-    apiKey: process.env.EMAIL_SERVICE_API || '',
-  },
+    host: 'smtp.your-email-provider.com',
+    port: 587, // or 465 for SSL
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: 'your_email@example.com',
+      pass: 'your_email_password',
+    },
+    from: '"Spectre Insights" <no-reply@spectreinsights.com>',
+  }
 };
 
 export default config;
