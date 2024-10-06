@@ -8,30 +8,156 @@ import asyncHandler from 'express-async-handler';
 import { sendEmail } from '../utils/sendEmail';
 import crypto from 'crypto';
 
-// Existing helper function
+// Helper function to generate JWT
 const generateToken = (user: IUser): string => {
   return jwt.sign({ id: user._id, role: user.role }, config.jwt.secret, {
     expiresIn: '1h',
   });
 };
 
-// Existing controller functions...
+// @desc    Register a new user
+// @route   POST /api/users/register
+// @access  Public
+export const registerUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { name, email, password } = req.body;
+
+    // Validate input
+    if (!name || !email || !password) {
+      res.status(400).json({ message: 'Please provide all fields.' });
+      return;
+    }
+
+    // Check if user already exists
+    const existingUser: IUser | null = await User.findOne({ email });
+    if (existingUser) {
+      res.status(400).json({ message: 'User already exists.' });
+      return;
+    }
+
+    // Create a new user
+    const user: IUser = new User({
+      name,
+      email,
+      password,
+    });
+
+    await user.save();
+
+    // Generate JWT Token
+    const token = generateToken(user);
+
+    res.status(201).json({
+      message: 'User registered successfully.',
+      token,
+    });
+  }
+);
+
+// @desc    Login user
+// @route   POST /api/users/login
+// @access  Public
+export const loginUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      res.status(400).json({ message: 'Please provide all fields.' });
+      return;
+    }
+
+    // Find user by email
+    const user: IUser | null = await User.findOne({ email }).select('+password');
+    if (!user) {
+      res.status(401).json({ message: 'Invalid email or password.' });
+      return;
+    }
+
+    // Compare passwords
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      res.status(401).json({ message: 'Invalid email or password.' });
+      return;
+    }
+
+    // Generate JWT Token
+    const token = generateToken(user);
+
+    res.status(200).json({
+      message: 'Login successful.',
+      token,
+    });
+  }
+);
+
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
+export const getUserProfile = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    // Ensure that authMiddleware has attached user info to req.user
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(401).json({ message: 'Not authorized.' });
+      return;
+    }
+
+    const user: IUser | null = await User.findById(userId).select('-password');
+    if (!user) {
+      res.status(404).json({ message: 'User not found.' });
+      return;
+    }
+
+    res.status(200).json(user);
+  }
+);
+
+// @desc    Get all users (Admin)
+// @route   GET /api/users
+// @access  Private / Admin
+export const getAllUsers = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const users: IUser[] = await User.find().select('-password');
+    res.status(200).json(users);
+  }
+);
+
+// @desc    Delete user (Admin)
+// @route   DELETE /api/users/:id
+// @access  Private / Admin
+export const deleteUser = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const user: IUser | null = await User.findById(req.params.id);
+    if (!user) {
+      res.status(404).json({ message: 'User not found.' });
+      return;
+    }
+
+    await user.deleteOne();
+
+    res.status(200).json({ message: 'User deleted successfully.' });
+  }
+);
 
 // @desc    Request Password Reset
 // @route   POST /api/users/request-password-reset
 // @access  Public
 export const requestPasswordReset = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ message: 'Please provide your email address.' });
+      res.status(400).json({ message: 'Please provide your email address.' });
+      return;
     }
 
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: 'No user found with that email.' });
+      res.status(404).json({ message: 'No user found with that email.' });
+      return;
     }
 
     // Generate reset token
@@ -64,7 +190,7 @@ export const requestPasswordReset = asyncHandler(
       user.resetPasswordExpires = undefined;
       await user.save({ validateBeforeSave: false });
 
-      return res.status(500).json({ message: 'Email could not be sent. Please try again later.' });
+      res.status(500).json({ message: 'Email could not be sent. Please try again later.' });
     }
   }
 );
@@ -73,11 +199,12 @@ export const requestPasswordReset = asyncHandler(
 // @route   POST /api/users/reset-password
 // @access  Public
 export const resetPassword = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
-      return res.status(400).json({ message: 'Invalid or missing token and password.' });
+      res.status(400).json({ message: 'Invalid or missing token and password.' });
+      return;
     }
 
     // Hash the token to compare with database
@@ -90,7 +217,8 @@ export const resetPassword = asyncHandler(
     });
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired password reset token.' });
+      res.status(400).json({ message: 'Invalid or expired password reset token.' });
+      return;
     }
 
     // Update the password
@@ -115,7 +243,7 @@ export const resetPassword = asyncHandler(
 
       res.status(200).json({ message: 'Password has been reset successfully.' });
     } catch (error) {
-      return res.status(500).json({ message: 'Email could not be sent. Please try again later.' });
+      res.status(500).json({ message: 'Email could not be sent. Please try again later.' });
     }
   }
 );

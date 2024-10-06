@@ -54,7 +54,9 @@ UserSchema.pre<IUser>('save', async function (next) {
 });
 
 // Method to compare passwords
-UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string
+): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
@@ -64,7 +66,10 @@ UserSchema.methods.generatePasswordReset = function (): string {
   const resetToken = crypto.randomBytes(20).toString('hex');
 
   // Hash the token and set it to resetPasswordToken field
-  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
 
   // Set expiration time (e.g., 1 hour from now)
   this.resetPasswordExpires = Date.now() + 3600000; // 1 hour

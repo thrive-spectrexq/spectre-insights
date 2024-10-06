@@ -1,27 +1,51 @@
-// src/middlewares/authMiddleware.ts
+// backend/src/middlewares/authMiddleware.ts
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config';
+import User, { IUser } from '../models/User';
+import asyncHandler from 'express-async-handler';
 
-// General authentication middleware
-export const authMiddleware = (roleRequired: 'user' | 'admin' = 'user') => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers['authorization']?.split(' ')[1];
-    if (!token) return res.status(403).json({ message: 'No token provided.' });
+interface JwtPayload {
+  id: string;
+  role: 'user' | 'admin';
+}
 
-    jwt.verify(token, config.jwt.secret, (err: any, decoded: any) => {
-      if (err) return res.status(401).json({ message: 'Unauthorized!' });
+export const authMiddleware = (requiredRole?: 'admin') =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    let token: string | undefined;
 
-      // Attach user info to the request
-      req.body.userId = decoded.id;
-      req.body.role = decoded.role; // Assuming role is included in the JWT payload
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer')
+    ) {
+      try {
+        token = req.headers.authorization.split(' ')[1];
 
-      // Role-based access control
-      if (roleRequired === 'admin' && req.body.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin access required.' });
+        // Verify token
+        const decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
+
+        // Attach user to request
+        req.user = {
+          id: decoded.id,
+          role: decoded.role,
+        };
+
+        // Check for admin role if required
+        if (requiredRole && decoded.role !== requiredRole) {
+          res.status(403).json({ message: 'Forbidden: Admins only.' });
+          return;
+        }
+
+        next();
+      } catch (error) {
+        res.status(401).json({ message: 'Not authorized, token failed.' });
+        return;
       }
+    }
 
-      next();
-    });
-  };
-};
+    if (!token) {
+      res.status(401).json({ message: 'Not authorized, no token.' });
+      return;
+    }
+  });
