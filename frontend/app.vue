@@ -13,9 +13,7 @@ const authStore = useAuthStore();
 if (authStore.token) {
   authStore.fetchUserProfile();
 }
-</script>
 
-<script setup lang="ts">
 // Import global styles
 import '~/assets/css/tailwind.css'
 </script>

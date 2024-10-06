@@ -1,7 +1,5 @@
-// frontend/stores/services.ts
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import axios from 'axios';
 
 interface Service {
     id: string;
@@ -20,10 +18,13 @@ export const useServicesStore = defineStore('services', () => {
         loading.value = true;
         error.value = null;
         try {
-            const response = await axios.get(`${process.env.API_BASE_URL}/services`);
-            services.value = response.data;
+            const { data } = await useFetch(`${process.env.API_BASE_URL}/services`, {
+                method: 'GET',
+                credentials: 'include', // Include cookies if necessary
+            });
+            services.value = data.value; // Access the reactive reference
         } catch (err: any) {
-            error.value = err.response?.data?.message || 'Failed to fetch services';
+            error.value = err.value?.data?.message || 'Failed to fetch services';
         } finally {
             loading.value = false;
         }

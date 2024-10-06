@@ -1,7 +1,4 @@
-// stores/contact.ts
-
 import { defineStore } from 'pinia';
-import axios from 'axios';
 
 interface ContactForm {
     name: string;
@@ -13,10 +10,14 @@ export const useContactStore = defineStore('contact', {
     actions: {
         async sendMessage(form: ContactForm) {
             try {
-                const response = await axios.post('/api/contact', form);
-                return response.data;
-            } catch (error) {
-                throw error;
+                const { data } = await useFetch('/api/contact', {
+                    method: 'POST',
+                    body: form,
+                    credentials: 'include', // Include cookies if necessary
+                });
+                return data.value; // Return the response data
+            } catch (error: any) {
+                throw new Error(error.value?.data?.message || 'Failed to send message');
             }
         },
     },

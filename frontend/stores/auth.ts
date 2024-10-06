@@ -1,7 +1,4 @@
-// frontend/stores/auth.ts
-
 import { defineStore } from 'pinia';
-import axios from 'axios';
 
 interface User {
     _id: string;
@@ -21,8 +18,13 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         async login(email: string, password: string) {
             try {
-                const response = await axios.post('/api/users/login', { email, password });
-                this.token = response.data.token;
+                const { data } = await useFetch('/api/users/login', {
+                    method: 'POST',
+                    body: { email, password },
+                    credentials: 'include', // If you're using cookies for authentication
+                });
+
+                this.token = data.value.token;
                 localStorage.setItem('token', this.token);
                 // Fetch user profile
                 await this.fetchUserProfile();
@@ -32,8 +34,13 @@ export const useAuthStore = defineStore('auth', {
         },
         async register(name: string, email: string, password: string) {
             try {
-                const response = await axios.post('/api/users/register', { name, email, password });
-                this.token = response.data.token;
+                const { data } = await useFetch('/api/users/register', {
+                    method: 'POST',
+                    body: { name, email, password },
+                    credentials: 'include', // If you're using cookies for authentication
+                });
+
+                this.token = data.value.token;
                 localStorage.setItem('token', this.token);
                 // Fetch user profile
                 await this.fetchUserProfile();
@@ -43,8 +50,12 @@ export const useAuthStore = defineStore('auth', {
         },
         async fetchUserProfile() {
             try {
-                const response = await axios.get('/api/users/profile');
-                this.user = response.data;
+                const { data } = await useFetch('/api/users/profile', {
+                    method: 'GET',
+                    credentials: 'include', // If you're using cookies for authentication
+                });
+
+                this.user = data.value;
             } catch (error) {
                 throw error;
             }

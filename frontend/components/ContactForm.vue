@@ -52,8 +52,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
-import toast from '~/plugins/toast';
+import { useFetch } from '#app'; // Import useFetch
 import Notification from '@/components/Notification.vue';
 
 interface ContactForm {
@@ -74,27 +73,40 @@ const notification = ref<{
   visible: boolean;
   type: 'success' | 'error' | 'info';
   message: string;
-}>({
+}>( {
   visible: false,
   type: 'success',
   message: '',
 });
 
-const toast = useToast();
-
 const handleSubmit = async () => {
   isSubmitting.value = true;
-  successMessage.value = '';
-  errorMessage.value = '';
 
   try {
-    const response = await axios.post('/api/contact', form.value);
-    successMessage.value = response.data.message;
-    toast.success('Your message has been sent successfully!');
+    // Using Nuxt's useFetch for POST request
+    const { data, error } = await useFetch('/api/contact', {
+      method: 'POST',
+      body: form.value,
+    });
+
+    if (error.value) {
+      throw new Error(error.value.message || 'An error occurred. Please try again.');
+    }
+
+    notification.value = {
+      visible: true,
+      type: 'success',
+      message: 'Your message has been sent successfully!',
+    };
+
+    // Reset the form
     form.value = { name: '', email: '', message: '' };
   } catch (error: any) {
-    errorMessage.value = error.response?.data?.message || 'An error occurred. Please try again.';
-    toast.error(errorMessage.value);
+    notification.value = {
+      visible: true,
+      type: 'error',
+      message: error.message || 'An error occurred. Please try again.',
+    };
   } finally {
     isSubmitting.value = false;
   }

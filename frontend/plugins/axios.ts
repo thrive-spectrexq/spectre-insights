@@ -1,19 +1,24 @@
 // frontend/plugins/axios.ts
 
-export default function ({ $axios, store }) {
-    $axios.onRequest((config) => {
-        const token = store.state.auth.token;
+import { defineNuxtPlugin } from '#app';
+import { useAuthStore } from '@/stores/auth';
+
+export default defineNuxtPlugin((nuxtApp) => {
+    const authStore = useAuthStore();
+
+    nuxtApp.$axios.onRequest((config) => {
+        const token = authStore.token;
         if (token) {
             config.headers.common['Authorization'] = `Bearer ${token}`;
         }
         return config;
     });
 
-    $axios.onError((error) => {
+    nuxtApp.$axios.onError((error) => {
         const code = parseInt(error.response?.status);
         if (code === 401) {
-            store.dispatch('auth/logout');
+            authStore.logout();
         }
         return Promise.reject(error);
     });
-}
+});

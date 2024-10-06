@@ -1,10 +1,8 @@
-// backend/tsconfig.json
-
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2020",
     "module": "commonjs",
-    "lib": ["ES6"],
+    "lib": ["ES2017"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,7 +15,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/types/**/*.d.ts" // Ensure this line is present
+    "src/types/**/*.d.ts" // Ensure your custom types are included
   ],
   "exclude": ["node_modules"]
 }

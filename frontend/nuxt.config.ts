@@ -4,34 +4,26 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   compatibilityDate: '2024-10-05',
   modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/proxy',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
-    'vue-toastification/nuxt',
   ],
   build: {
-    transpile: [],
+    transpile: [], // Add any packages here that need transpiling
   },
   css: [
-    'leaflet/dist/leaflet.css',
     '@/assets/css/tailwind.css',
   ],
   runtimeConfig: {
-    axios: {
-      proxy: true,
-      credentials: true,
-    },
-    proxy: {
-      '/api/': { target: 'http://localhost:5000', pathRewrite: { '^/api/': '/api/' } },
+    public: {
+      API_BASE_URL: 'http://localhost:5000/api', // API base URL
     },
   },
   typescript: {
     strict: true,
   },
   plugins: [
+    '~/plugins/auth.ts',
     '~/plugins/axios.ts',
-    '~/plugins/auth.ts'
   ],
   postcss: {
     plugins: {

@@ -44,27 +44,60 @@
         <NuxtLink to="/signup" class="text-indigo-600 hover:text-indigo-800">Sign Up</NuxtLink>
       </div>
     </form>
+
+    <!-- Notification -->
+    <Notification
+      v-if="notification.visible"
+      :type="notification.type"
+      :message="notification.message"
+      :duration="5000"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import { useToast } from 'vue-toastification';
+import Notification from '@/components/Notification.vue'; // Import Notification component
 
 const email = ref('');
 const password = ref('');
 const remember = ref(false);
 
 const authStore = useAuthStore();
-const toast = useToast();
+
+const notification = ref<{
+  visible: boolean;
+  type: 'success' | 'error';
+  message: string;
+}>({
+  visible: false,
+  type: 'success',
+  message: '',
+});
 
 const handleSignin = async () => {
   try {
     await authStore.signin(email.value, password.value);
-    toast.success('Signin successful!');
+
+    // Set notification for success
+    notification.value = {
+      visible: true,
+      type: 'success',
+      message: 'Signin successful!',
+    };
+    
+    // Optionally reset the form fields or redirect after successful sign-in
+    email.value = '';
+    password.value = '';
+    
   } catch (error: any) {
-    toast.error(error);
+    // Set notification for error
+    notification.value = {
+      visible: true,
+      type: 'error',
+      message: error.message || 'An error occurred during signin.',
+    };
   }
 };
 </script>

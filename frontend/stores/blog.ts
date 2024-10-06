@@ -1,7 +1,5 @@
-// frontend/stores/blog.ts
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import axios from 'axios';
 
 interface BlogPost {
     id: string;
@@ -21,10 +19,13 @@ export const useBlogStore = defineStore('blog', () => {
         loading.value = true;
         error.value = null;
         try {
-            const response = await axios.get(`${process.env.API_BASE_URL}/blogs`);
-            posts.value = response.data;
+            const { data } = await useFetch(`${process.env.API_BASE_URL}/blogs`, {
+                method: 'GET',
+                credentials: 'include', // Include cookies if necessary
+            });
+            posts.value = data.value;
         } catch (err: any) {
-            error.value = err.response?.data?.message || 'Failed to fetch blog posts';
+            error.value = err.value?.data?.message || 'Failed to fetch blog posts';
         } finally {
             loading.value = false;
         }
@@ -34,12 +35,14 @@ export const useBlogStore = defineStore('blog', () => {
         loading.value = true;
         error.value = null;
         try {
-            const response = await axios.get(`${process.env.API_BASE_URL}/blogs/search`, {
+            const { data } = await useFetch(`${process.env.API_BASE_URL}/blogs/search`, {
+                method: 'GET',
                 params: { q: query },
+                credentials: 'include', // Include cookies if necessary
             });
-            posts.value = response.data;
+            posts.value = data.value;
         } catch (err: any) {
-            error.value = err.response?.data?.message || 'Search failed';
+            error.value = err.value?.data?.message || 'Search failed';
         } finally {
             loading.value = false;
         }

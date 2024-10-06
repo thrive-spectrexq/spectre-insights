@@ -1,7 +1,5 @@
-// frontend/stores/user.ts
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import axios from 'axios';
 
 interface User {
   id: string;
@@ -12,7 +10,7 @@ interface User {
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
-  const token = ref<string | null>(null);
+  const token = ref<string | null>(localStorage.getItem('token')); // Retrieve token from localStorage if needed
   const loading = ref<boolean>(false);
   const error = ref<string | null>(null);
 
@@ -21,15 +19,17 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await axios.post(`${process.env.API_BASE_URL}/users/register`, {
-        name,
-        email,
-        password,
+      const { data } = await useFetch(`${process.env.API_BASE_URL}/users/register`, {
+        method: 'POST',
+        body: { name, email, password },
+        credentials: 'include', // If you're using cookies for authentication
       });
-      token.value = response.data.token;
+
+      token.value = data.value.token;
+      localStorage.setItem('token', token.value); // Store token in localStorage
       // Optionally, decode token to get user info or fetch user profile
     } catch (err: any) {
-      error.value = err.response?.data?.message || 'Signup failed';
+      error.value = err.value?.data?.message || 'Signup failed';
     } finally {
       loading.value = false;
     }
@@ -40,14 +40,17 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await axios.post(`${process.env.API_BASE_URL}/users/login`, {
-        email,
-        password,
+      const { data } = await useFetch(`${process.env.API_BASE_URL}/users/login`, {
+        method: 'POST',
+        body: { email, password },
+        credentials: 'include', // If you're using cookies for authentication
       });
-      token.value = response.data.token;
+
+      token.value = data.value.token;
+      localStorage.setItem('token', token.value); // Store token in localStorage
       // Optionally, decode token to get user info or fetch user profile
     } catch (err: any) {
-      error.value = err.response?.data?.message || 'Signin failed';
+      error.value = err.value?.data?.message || 'Signin failed';
     } finally {
       loading.value = false;
     }
@@ -57,7 +60,7 @@ export const useUserStore = defineStore('user', () => {
   const signout = () => {
     user.value = null;
     token.value = null;
-    // Optionally, clear tokens from storage
+    localStorage.removeItem('token'); // Clear token from storage
   };
 
   // Fetch User Profile
@@ -66,10 +69,13 @@ export const useUserStore = defineStore('user', () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await axios.get(`${process.env.API_BASE_URL}/users/profile`);
-      user.value = response.data;
+      const { data } = await useFetch(`${process.env.API_BASE_URL}/users/profile`, {
+        method: 'GET',
+        credentials: 'include', // If you're using cookies for authentication
+      });
+      user.value = data.value;
     } catch (err: any) {
-      error.value = err.response?.data?.message || 'Failed to fetch profile';
+      error.value = err.value?.data?.message || 'Failed to fetch profile';
     } finally {
       loading.value = false;
     }
@@ -86,4 +92,3 @@ export const useUserStore = defineStore('user', () => {
     fetchUserProfile,
   };
 });
-

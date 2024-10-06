@@ -12,19 +12,44 @@
     <div v-else>
       <p>Loading...</p>
     </div>
+
+    <!-- Notification -->
+    <Notification
+      v-if="notification.visible"
+      :type="notification.type"
+      :message="notification.message"
+      :duration="5000"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import { useToast } from 'vue-toastification';
+import Notification from '@/components/Notification.vue'; // Import Notification component
 
 const authStore = useAuthStore();
-const toast = useToast();
 
+const notification = ref<{
+  visible: boolean;
+  type: 'success' | 'error' | 'info';
+  message: string;
+}>({
+  visible: false,
+  type: 'info',
+  message: '',
+});
+
+// Handle sign out
 const handleSignout = () => {
   authStore.signout();
-  toast.info('You have been signed out.');
+  
+  // Set notification for sign-out success
+  notification.value = {
+    visible: true,
+    type: 'info',
+    message: 'You have been signed out.',
+  };
 };
 </script>
 

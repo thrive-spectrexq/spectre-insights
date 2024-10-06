@@ -21,25 +21,56 @@
         </button>
       </div>
     </form>
+
+    <!-- Notification -->
+    <Notification
+      v-if="notification.visible"
+      :type="notification.type"
+      :message="notification.message"
+      :duration="5000"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import { useToast } from 'vue-toastification';
+import Notification from '@/components/Notification.vue'; // Import Notification component
 
 const email = ref('');
-
 const authStore = useAuthStore();
-const toast = useToast();
+
+const notification = ref<{
+  visible: boolean;
+  type: 'success' | 'error';
+  message: string;
+}>({
+  visible: false,
+  type: 'success',
+  message: '',
+});
 
 const handleResetPassword = async () => {
   try {
     const message = await authStore.resetPassword(email.value);
-    toast.success(message);
+
+    // Set notification for success
+    notification.value = {
+      visible: true,
+      type: 'success',
+      message: message, // Display the success message from the auth store
+    };
+
+    // Optionally reset the email field after successful submission
+    email.value = '';
+    
   } catch (error: any) {
-    toast.error(error);
+    // Set notification for error
+    notification.value = {
+      visible: true,
+      type: 'error',
+      message: error.message || 'An error occurred while sending the reset link.',
+    };
   }
 };
 </script>
