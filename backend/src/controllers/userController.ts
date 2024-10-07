@@ -101,33 +101,6 @@ export const getUserProfile = asyncHandler(
   }
 );
 
-// @desc    Get all users (Admin)
-// @route   GET /api/users
-// @access  Private / Admin
-export const getAllUsers = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const users: IUser[] = await User.find().select('-password');
-    res.status(200).json(users);
-  }
-);
-
-// @desc    Delete user (Admin)
-// @route   DELETE /api/users/:id
-// @access  Private / Admin
-export const deleteUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const user: IUser | null = await User.findById(req.params.id);
-    if (!user) {
-      res.status(404).json({ message: 'User not found.' });
-      return;
-    }
-
-    await user.deleteOne();
-
-    res.status(200).json({ message: 'User deleted successfully.' });
-  }
-);
-
 // @desc    Request Password Reset
 // @route   POST /api/users/request-password-reset
 // @access  Public

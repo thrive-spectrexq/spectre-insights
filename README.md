@@ -5,7 +5,7 @@
 ![Nuxt.js](https://img.shields.io/badge/nuxt.js-3.x-red.svg)
 ![Docker](https://img.shields.io/badge/docker-%3E%3D20.10-blue.svg)
 
-**Spectre Insights** is a comprehensive web application designed to provide insightful information through various sections such as services, blog, products, and more. Built using modern technologies like Nuxt.js, Vue.js, Node.js, and MongoDB, Spectre Insights offers a seamless experience for both regular users and administrators.
+**Spectre Insights** is a comprehensive web application designed to provide insightful information through various sections such as services, blog, products, and more. Built using modern technologies like Nuxt.js, Vue.js, Node.js, Express and MongoDB, Spectre Insights offers a seamless experience for both regular users and administrators.
 
 ---
 
@@ -57,8 +57,8 @@
 ### Frontend
 
 - **Framework:** Nuxt.js (Vue.js)
-- **Language:** TypeScript, JavaScript
-- **Styling:** SCSS/SASS, Tailwind CSS
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
 - **State Management:** Pinia
 - **Routing:** Vue Router
 - **Build Tool:** Vite (default with Nuxt 3)
@@ -67,11 +67,10 @@
 
 - **Runtime:** Node.js
 - **Framework:** Express.js
-- **Language:** JavaScript
+- **Language:** Typescript
 - **Authentication:** JWT (JSON Web Tokens)
 - **Database:** MongoDB
 - **ODM:** Mongoose
-- **CMS:** Strapi (Headless CMS)
 
 ### Additional Tools
 

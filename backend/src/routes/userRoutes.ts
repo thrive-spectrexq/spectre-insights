@@ -5,8 +5,6 @@ import {
     registerUser,
     loginUser,
     getUserProfile,
-    getAllUsers,
-    deleteUser,
     requestPasswordReset,
     resetPassword,
 } from '../controllers/userController';
@@ -24,9 +22,5 @@ router.post('/reset-password', resetPassword);
 
 // Protected routes - Require Authentication
 router.get('/profile', getUserProfile);
-
-// Admin routes - Require Authentication and Admin Role
-//router.get('/', authMiddleware('admin'), getAllUsers);
-//router.delete('/:id', authMiddleware('admin'), deleteUser);
 
 export default router;
