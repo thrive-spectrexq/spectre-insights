@@ -22,22 +22,38 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useFetch } from '#app';
 
-interface Testimonial {
-  _id: string;
-  message: string;
-  authorName: string;
-  authorPosition: string;
-  authorImage: string;
-}
-
-const { data: testimonials, error } = await useFetch<Testimonial[]>('/api/testimonials');
-
-// Optionally handle error
-if (error.value) {
-  console.error('Error fetching testimonials:', error.value);
-}
+// Define mock testimonials data
+const testimonials = ref([
+  {
+    _id: '1',
+    message: 'This service has completely transformed our business. Highly recommended!',
+    authorName: 'John Doe',
+    authorPosition: 'CEO, Acme Corp',
+    authorImage: 'https://randomuser.me/api/portraits/men/1.jpg',
+  },
+  {
+    _id: '2',
+    message: 'The team is professional, efficient, and delivered beyond our expectations.',
+    authorName: 'Jane Smith',
+    authorPosition: 'Marketing Director, XYZ Ltd',
+    authorImage: 'https://randomuser.me/api/portraits/women/2.jpg',
+  },
+  {
+    _id: '3',
+    message: 'Outstanding experience from start to finish. We saw results within weeks.',
+    authorName: 'Michael Johnson',
+    authorPosition: 'Founder, StartUp Inc.',
+    authorImage: 'https://randomuser.me/api/portraits/men/3.jpg',
+  },
+  {
+    _id: '4',
+    message: 'A truly exceptional service that has helped us reach new heights.',
+    authorName: 'Emily Davis',
+    authorPosition: 'COO, Tech Innovations',
+    authorImage: 'https://randomuser.me/api/portraits/women/4.jpg',
+  },
+]);
 </script>
 
 <style scoped>

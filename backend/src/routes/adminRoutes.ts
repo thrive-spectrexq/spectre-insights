@@ -11,7 +11,7 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 const router = express.Router();
 
 // Apply authMiddleware with 'admin' role to all admin routes
-//router.use(authMiddleware('admin'));
+router.use(authMiddleware);
 
 // Admin Routes
 router.get('/users', getAllUsers);

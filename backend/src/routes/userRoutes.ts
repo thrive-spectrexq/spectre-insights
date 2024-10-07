@@ -21,6 +21,6 @@ router.post('/request-password-reset', requestPasswordReset);
 router.post('/reset-password', resetPassword);
 
 // Protected routes - Require Authentication
-router.get('/profile', getUserProfile);
+router.get('/profile', authMiddleware, getUserProfile);
 
 export default router;

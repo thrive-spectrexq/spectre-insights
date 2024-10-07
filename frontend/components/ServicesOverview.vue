@@ -19,21 +19,34 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useFetch } from '#app';
 
-interface Service {
-  _id: string;
-  title: string;
-  description: string;
-  slug: string;
-}
-
-const { data: services, error } = await useFetch<Service[]>('/api/services');
-
-// Optional error handling
-if (error.value) {
-  console.error('Error fetching services:', error.value);
-}
+// Define mock data for services
+const services = ref([
+  {
+    _id: '1',
+    title: 'Web Development',
+    description: 'We offer cutting-edge web development services to create dynamic and responsive websites.',
+    slug: 'web-development',
+  },
+  {
+    _id: '2',
+    title: 'SEO Optimization',
+    description: 'Our SEO services help improve your website\'s ranking and attract more visitors.',
+    slug: 'seo-optimization',
+  },
+  {
+    _id: '3',
+    title: 'Digital Marketing',
+    description: 'Enhance your brand\'s visibility with our comprehensive digital marketing solutions.',
+    slug: 'digital-marketing',
+  },
+  {
+    _id: '4',
+    title: 'UI/UX Design',
+    description: 'Our team creates visually stunning and user-friendly interfaces to enhance user experience.',
+    slug: 'ui-ux-design',
+  },
+]);
 </script>
 
 <style scoped>
