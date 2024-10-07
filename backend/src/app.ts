@@ -10,6 +10,7 @@ import userRoutes from './routes/userRoutes';
 import adminRoutes from './routes/adminRoutes';
 import blogRoutes from './routes/blogRoutes'; // Import blog routes
 import contactRoutes from './routes/contactRoutes';
+import contentRoutes from './routes/contentRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import config from './config';
 import logger from './utils/logger'; // Import logger
@@ -38,6 +39,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/content', contentRoutes);
 
 // 6. Root Route
 app.get('/', (req: Request, res: Response) => {
