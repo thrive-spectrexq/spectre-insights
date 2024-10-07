@@ -23,7 +23,7 @@ router.post('/request-password-reset', requestPasswordReset);
 router.post('/reset-password', resetPassword);
 
 // Protected routes - Require Authentication
-//router.get('/profile', authMiddleware(), getUserProfile);
+router.get('/profile', getUserProfile);
 
 // Admin routes - Require Authentication and Admin Role
 //router.get('/', authMiddleware('admin'), getAllUsers);

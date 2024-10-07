@@ -1,11 +1,22 @@
-// src/routes/adminRoutes.ts
-import { Router } from 'express';
-import { getAdminDashboard } from '../controllers/adminController';
+// backend/src/routes/adminRoutes.ts
+
+import express from 'express';
+import {
+  getAllUsers,
+  deleteUser,
+  // Add more admin-specific controllers as needed
+} from '../controllers/adminController';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
-const router = Router();
+const router = express.Router();
 
-// Use 'admin' role required for admin routes
-router.get('/dashboard', authMiddleware('admin'), getAdminDashboard);
+// Apply authMiddleware with 'admin' role to all admin routes
+//router.use(authMiddleware('admin'));
+
+// Admin Routes
+router.get('/users', getAllUsers);
+router.delete('/users/:id', deleteUser);
+
+// Add more admin routes here
 
 export default router;

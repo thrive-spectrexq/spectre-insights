@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
 import userRoutes from './routes/userRoutes';
+import adminRoutes from './routes/adminRoutes';
 import blogRoutes from './routes/blogRoutes'; // Import blog routes
 import servicesRoutes from './routes/servicesRoutes';
 import productRoutes from './routes/productRoutes';
@@ -37,6 +38,7 @@ app.use(express.json());
 
 // 5. Routes
 app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/services', servicesRoutes); // Use services routes
 app.use('/api/products', productRoutes); // Assuming you have product routes
