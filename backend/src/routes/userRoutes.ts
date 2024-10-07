@@ -22,11 +22,11 @@ router.post('/login', loginUser);
 router.post('/request-password-reset', requestPasswordReset);
 router.post('/reset-password', resetPassword);
 
-// Protected routes
-router.get('/profile', authMiddleware(), getUserProfile);
+// Protected routes - Require Authentication
+//router.get('/profile', authMiddleware(), getUserProfile);
 
-// Admin routes
-router.get('/', authMiddleware('admin'), getAllUsers);
-router.delete('/:id', authMiddleware('admin'), deleteUser);
+// Admin routes - Require Authentication and Admin Role
+//router.get('/', authMiddleware('admin'), getAllUsers);
+//router.delete('/:id', authMiddleware('admin'), deleteUser);
 
 export default router;

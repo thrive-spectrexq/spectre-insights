@@ -22,29 +22,20 @@ export const registerUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { name, email, password } = req.body;
 
-    // Validate input
     if (!name || !email || !password) {
       res.status(400).json({ message: 'Please provide all fields.' });
       return;
     }
 
-    // Check if user already exists
     const existingUser: IUser | null = await User.findOne({ email });
     if (existingUser) {
       res.status(400).json({ message: 'User already exists.' });
       return;
     }
 
-    // Create a new user
-    const user: IUser = new User({
-      name,
-      email,
-      password,
-    });
-
+    const user: IUser = new User({ name, email, password });
     await user.save();
 
-    // Generate JWT Token
     const token = generateToken(user);
 
     res.status(201).json({
@@ -61,27 +52,23 @@ export const loginUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { email, password } = req.body;
 
-    // Validate input
     if (!email || !password) {
       res.status(400).json({ message: 'Please provide all fields.' });
       return;
     }
 
-    // Find user by email
     const user: IUser | null = await User.findOne({ email }).select('+password');
     if (!user) {
       res.status(401).json({ message: 'Invalid email or password.' });
       return;
     }
 
-    // Compare passwords
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       res.status(401).json({ message: 'Invalid email or password.' });
       return;
     }
 
-    // Generate JWT Token
     const token = generateToken(user);
 
     res.status(200).json({
@@ -96,8 +83,8 @@ export const loginUser = asyncHandler(
 // @access  Private
 export const getUserProfile = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    // Ensure that authMiddleware has attached user info to req.user
-    const userId = req.user?.id;
+    // Access the user ID attached to the request by the auth middleware
+    const userId = (req as any).user?.id;
 
     if (!userId) {
       res.status(401).json({ message: 'Not authorized.' });
@@ -160,15 +147,11 @@ export const requestPasswordReset = asyncHandler(
       return;
     }
 
-    // Generate reset token
     const resetToken = user.generatePasswordReset();
-
     await user.save({ validateBeforeSave: false });
 
-    // Create reset URL
     const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
 
-    // Email message
     const message = `
       <p>You have requested a password reset.</p>
       <p>Please click on the following link to reset your password:</p>
@@ -185,7 +168,6 @@ export const requestPasswordReset = asyncHandler(
 
       res.status(200).json({ message: 'Password reset email sent.' });
     } catch (error) {
-      // If email fails, reset the resetPasswordToken and resetPasswordExpires
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
       await user.save({ validateBeforeSave: false });
@@ -207,10 +189,8 @@ export const resetPassword = asyncHandler(
       return;
     }
 
-    // Hash the token to compare with database
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-    // Find user by resetPasswordToken and check if token has not expired
     const user: IUser | null = await User.findOne({
       resetPasswordToken: hashedToken,
       resetPasswordExpires: { $gt: Date.now() },
@@ -221,14 +201,12 @@ export const resetPassword = asyncHandler(
       return;
     }
 
-    // Update the password
     user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
 
     await user.save();
 
-    // Optionally, send a confirmation email
     const message = `
       <p>Your password has been successfully reset.</p>
       <p>If you did not perform this action, please contact support immediately.</p>

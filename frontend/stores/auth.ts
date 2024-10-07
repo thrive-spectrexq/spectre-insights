@@ -1,3 +1,4 @@
+// frontend/stores/auth.ts
 import { defineStore } from 'pinia';
 
 interface User {

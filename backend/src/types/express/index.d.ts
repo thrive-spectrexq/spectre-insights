@@ -15,4 +15,4 @@ interface AuthenticatedUser {
     role: 'user' | 'admin';
 }
 
-export { AuthenticatedUser };
+export { }; // Ensures this file is treated as a module
