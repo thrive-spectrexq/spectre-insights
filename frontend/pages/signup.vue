@@ -35,9 +35,11 @@
       <div>
         <button
           type="submit"
+          :disabled="isLoading"
           class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Sign Up
+          <span v-if="isLoading">Loading...</span>
+          <span v-else>Sign Up</span>
         </button>
       </div>
       <div class="text-center">
@@ -60,12 +62,14 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import Notification from '@/components/Notification.vue'; // Import Notification component
+import { useRouter } from 'vue-router';
 
 const name = ref('');
 const email = ref('');
 const password = ref('');
-
+const isLoading = ref(false); // New loading state
 const authStore = useAuthStore();
+const router = useRouter();
 
 const notification = ref<{
   visible: boolean;
@@ -79,7 +83,7 @@ const notification = ref<{
 
 const handleSignup = async () => {
   try {
-    await authStore.signup(name.value, email.value, password.value);
+    await authStore.register(name.value, email.value, password.value); // Use register instead of signup
     
     // Set notification for success
     notification.value = {
@@ -102,6 +106,7 @@ const handleSignup = async () => {
     };
   }
 };
+
 </script>
 
 <style scoped>

@@ -10,7 +10,7 @@
       </button>
     </div>
     <div v-else>
-      <p>Loading...</p>
+      <p class="text-center">Loading...</p> <!-- Consider adding a spinner here -->
     </div>
 
     <!-- Notification -->
@@ -34,7 +34,7 @@ const notification = ref<{
   visible: boolean;
   type: 'success' | 'error' | 'info';
   message: string;
-}>({
+}>( {
   visible: false,
   type: 'info',
   message: '',
@@ -42,14 +42,23 @@ const notification = ref<{
 
 // Handle sign out
 const handleSignout = () => {
-  authStore.signout();
-  
-  // Set notification for sign-out success
-  notification.value = {
-    visible: true,
-    type: 'info',
-    message: 'You have been signed out.',
-  };
+  authStore.signout()
+    .then(() => {
+      // Set notification for sign-out success
+      notification.value = {
+        visible: true,
+        type: 'info',
+        message: 'You have been signed out.',
+      };
+    })
+    .catch((error) => {
+      // Set notification for sign-out error
+      notification.value = {
+        visible: true,
+        type: 'error',
+        message: 'Error signing out: ' + error.message,
+      };
+    });
 };
 </script>
 

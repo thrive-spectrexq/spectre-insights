@@ -24,7 +24,12 @@
       </div>
       <div class="flex items-center justify-between">
         <div>
-          <input type="checkbox" id="remember" v-model="remember" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+          <input 
+            type="checkbox" 
+            id="remember" 
+            v-model="remember" 
+            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" 
+          />
           <label for="remember" class="ml-2 block text-sm text-gray-900">Remember me</label>
         </div>
         <div>
@@ -34,9 +39,11 @@
       <div>
         <button
           type="submit"
+          :disabled="isLoading"
           class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Sign In
+          <span v-if="isLoading">Loading...</span>
+          <span v-else>Sign In</span>
         </button>
       </div>
       <div class="text-center">
@@ -59,12 +66,14 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import Notification from '@/components/Notification.vue'; // Import Notification component
+import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
 const remember = ref(false);
-
+const isLoading = ref(false); // Loading state
 const authStore = useAuthStore();
+const router = useRouter();
 
 const notification = ref<{
   visible: boolean;
@@ -78,7 +87,7 @@ const notification = ref<{
 
 const handleSignin = async () => {
   try {
-    await authStore.signin(email.value, password.value);
+    await authStore.login(email.value, password.value); // Use login instead of signin
 
     // Set notification for success
     notification.value = {
@@ -86,7 +95,7 @@ const handleSignin = async () => {
       type: 'success',
       message: 'Signin successful!',
     };
-    
+
     // Optionally reset the form fields or redirect after successful sign-in
     email.value = '';
     password.value = '';
@@ -100,6 +109,7 @@ const handleSignin = async () => {
     };
   }
 };
+
 </script>
 
 <style scoped>

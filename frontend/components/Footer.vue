@@ -23,6 +23,18 @@
             <li class="mb-1">
               <NuxtLink to="/contact" class="hover:underline">Contact</NuxtLink>
             </li>
+            <li class="mb-1">
+              <NuxtLink to="/terms-of-service" class="hover:underline">Terms of Service</NuxtLink>
+            </li>
+            <li class="mb-1">
+              <NuxtLink to="/privacy-policy" class="hover:underline">Privacy Policy</NuxtLink>
+            </li>
+            <li class="mb-1">
+              <NuxtLink to="/about" class="hover:underline">About</NuxtLink>
+            </li>
+            <li class="mb-1">
+              <NuxtLink to="/products" class="hover:underline">Products</NuxtLink>
+            </li>
           </ul>
         </div>
         <!-- Contact Info -->

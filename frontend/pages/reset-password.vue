@@ -15,9 +15,11 @@
       <div>
         <button
           type="submit"
+          :disabled="isLoading"
           class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Send Reset Link
+          <span v-if="isLoading">Loading...</span>
+          <span v-else>Send Reset Link</span>
         </button>
       </div>
     </form>
@@ -29,6 +31,11 @@
       :message="notification.message"
       :duration="5000"
     />
+
+    <!-- Additional guidance -->
+    <p v-if="notification.visible && notification.type === 'success'" class="mt-4 text-sm text-gray-600">
+      Please check your email for the reset link.
+    </p>
   </div>
 </template>
 
@@ -39,6 +46,7 @@ import Notification from '@/components/Notification.vue'; // Import Notification
 
 const email = ref('');
 const authStore = useAuthStore();
+const isLoading = ref(false); // Loading state
 
 const notification = ref<{
   visible: boolean;
@@ -51,6 +59,7 @@ const notification = ref<{
 });
 
 const handleResetPassword = async () => {
+  isLoading.value = true; // Set loading state
   try {
     const message = await authStore.resetPassword(email.value);
 
@@ -71,6 +80,8 @@ const handleResetPassword = async () => {
       type: 'error',
       message: error.message || 'An error occurred while sending the reset link.',
     };
+  } finally {
+    isLoading.value = false; // Reset loading state
   }
 };
 </script>

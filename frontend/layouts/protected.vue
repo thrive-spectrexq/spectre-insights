@@ -1,7 +1,7 @@
 <!-- frontend/layouts/protected.vue -->
 <template>
     <div>
-      <Navbar />
+      <Header />
       <NuxtRouteAnnouncer />
       <NuxtPage />
       <Footer />
@@ -9,6 +9,8 @@
   </template>
   
   <script setup lang="ts">
+import Header from '~/components/Header.vue';
+
   definePageMeta({
     middleware: 'auth',
   })

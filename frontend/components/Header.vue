@@ -7,7 +7,10 @@
         <NuxtLink to="/services" class="mx-2 text-gray-700 hover:text-indigo-600">Services</NuxtLink>
         <NuxtLink to="/blog" class="mx-2 text-gray-700 hover:text-indigo-600">Blog</NuxtLink>
         <NuxtLink to="/contact" class="mx-2 text-gray-700 hover:text-indigo-600">Contact</NuxtLink>
-        <NuxtLink to="/login" class="mx-2 text-gray-700 hover:text-indigo-600">Login</NuxtLink>
+        <NuxtLink to="/about" class="mx-2 text-gray-700 hover:text-indigo-600">About</NuxtLink>
+        <NuxtLink to="/products" class="mx-2 text-gray-700 hover:text-indigo-600">Products</NuxtLink>
+        <NuxtLink to="/signin" class="mx-2 text-gray-700 hover:text-indigo-600">Sign In</NuxtLink>
+        <NuxtLink to="/signup" class="mx-2 text-gray-700 hover:text-indigo-600">Sign Up</NuxtLink>
       </nav>
     </div>
   </header>
