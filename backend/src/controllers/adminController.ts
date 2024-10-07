@@ -1,29 +1,48 @@
-// backend/src/controllers/adminController.ts
-
-import { Request, Response, NextFunction } from 'express';
-import User, { IUser } from '../models/User';
+// src/controllers/adminController.ts
+import { Request, Response } from 'express';
+import Admin from '../models/Admin';
+import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
+import config from '../config'; // Ensure you have this import
 
-// @desc    Get all users (Admin)
-export const getAllUsers = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const users: IUser[] = await User.find().select('-password');
-    res.status(200).json(users);
-  }
-);
+// Register a new admin
+export const registerAdmin = asyncHandler(async (req: Request, res: Response) => {
+    const { email, password } = req.body;
 
-// @desc    Delete a user (Admin)
-export const deleteUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const user: IUser | null = await User.findById(req.params.id);
-    if (!user) {
-      res.status(404).json({ message: 'User not found.' });
-      return;
+    // Create the admin
+    const admin = await Admin.create({ email, password });
+
+    // Convert Mongoose document to plain object
+    const adminObject = admin.toObject();
+
+    // Omit the password using destructuring
+    const { password: _, ...adminResponse } = adminObject;
+
+    // Send the response without the password
+    res.status(201).json(adminResponse);
+});
+
+// Login admin
+export const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    // Find admin by email and include password field
+    const admin = await Admin.findOne({ email }).select('+password');
+
+    if (admin && await admin.comparePassword(password)) {
+        // Generate JWT token
+        const token = jwt.sign(
+            { id: admin._id, role: admin.role },
+            config.jwt.secret,
+            { expiresIn: '1h' }
+        );
+
+        // Optionally, you can also send admin details without the password
+        const adminObject = admin.toObject();
+        const { password: _, ...adminResponse } = adminObject;
+
+        res.json({ token, admin: adminResponse });
+    } else {
+        res.status(401).json({ message: 'Invalid credentials' });
     }
-
-    await user.deleteOne();
-    res.status(200).json({ message: 'User deleted successfully.' });
-  }
-);
-
-// Add more admin-specific controllers as needed
+});

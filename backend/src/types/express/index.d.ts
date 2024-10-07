@@ -1,18 +1,26 @@
-// backend/src/types/express/index.d.ts
+// src/types/express/index.d.ts
 
 import { IUser } from '../../models/User';
+import { IAdmin } from '../../models/Admin';
 
 declare global {
     namespace Express {
+        interface UserPayload {
+            id: string;
+            role: 'user' | 'admin';
+        }
+
+        interface AdminPayload {
+            id: string;
+            role: 'admin';
+            permissions: string[]; // Optional: Define permissions for the admin
+        }
+
         interface Request {
-            user?: AuthenticatedUser;
+            user?: UserPayload; // For general authMiddleware
+            admin?: AdminPayload; // For adminAuthMiddleware
         }
     }
 }
 
-interface AuthenticatedUser {
-    id: string;
-    role: 'user' | 'admin';
-}
-
-export { }; // Ensures this file is treated as a module
+export {};

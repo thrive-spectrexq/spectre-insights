@@ -1,22 +1,55 @@
-// backend/src/routes/adminRoutes.ts
+// src/routes/adminRoutes.ts
 
 import express from 'express';
 import {
-  getAllUsers,
-  deleteUser,
-  // Add more admin-specific controllers as needed
+    registerAdmin,
+    loginAdmin,
 } from '../controllers/adminController';
-import { authMiddleware } from '../middlewares/authMiddleware';
+import {
+    getDashboardStats,
+} from '../controllers/dashboardController';
+import {
+    createBlogPost,
+    getAllBlogPosts,
+    updateBlogPost,
+    deleteBlogPost,
+} from '../controllers/contentController';
+import {
+    getAllUsers,
+    updateUserRole,
+    deleteUser,
+} from '../controllers/userManagementController';
+import {
+    getSiteSettings,
+    updateSiteSettings,
+} from '../controllers/siteSettingsController';
+import { adminAuthMiddleware } from '../middlewares/adminAuthMiddleware'; // Use adminAuthMiddleware
 
 const router = express.Router();
 
-// Apply authMiddleware with 'admin' role to all admin routes
-router.use(authMiddleware);
+// Admin Authentication
+router.post('/register', registerAdmin);
+router.post('/login', loginAdmin);
 
-// Admin Routes
+// Apply adminAuthMiddleware to all routes below
+router.use(adminAuthMiddleware);
+
+// Admin Dashboard
+router.get('/dashboard', getDashboardStats);
+
+// Content Management
+router.post('/blogs', createBlogPost);
+router.get('/blogs', getAllBlogPosts);
+router.put('/blogs/:id', updateBlogPost);
+router.delete('/blogs/:id', deleteBlogPost);
+
+// User Management
 router.get('/users', getAllUsers);
+router.put('/users/:id/role', updateUserRole);
 router.delete('/users/:id', deleteUser);
 
-// Add more admin routes here
+// Site Settings
+router.get('/settings', getSiteSettings);
+router.put('/settings', updateSiteSettings);
 
 export default router;

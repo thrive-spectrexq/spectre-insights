@@ -7,4 +7,15 @@ export const getAllUsers = async (req: Request, res: Response) => {
     res.json(users);
 };
 
-// Add delete, update user roles, etc.
+export const updateUserRole = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { role } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(id, { role }, { new: true });
+    res.json(updatedUser);
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(204).send();
+};

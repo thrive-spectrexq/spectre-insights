@@ -78,7 +78,7 @@
 - **Containerization:** Docker
 - **CI/CD:** GitHub Actions
 - **Deployment:** Vercel or Netlify (Frontend), Heroku, AWS, or DigitalOcean (Backend)
-- **Testing:** Jest, Cypress, Mocha, Chai, Supertest
+- **Testing:** Jest, Supertest
 
 ---
 
@@ -128,7 +128,7 @@
 - **Frontend** .env
 
   ```bash
-  NUXT_PUBLIC_API_URL=http://localhost:5000/api
+  API_BASE_URL=http://localhost:5000/api
 
 ### Running the Application
 

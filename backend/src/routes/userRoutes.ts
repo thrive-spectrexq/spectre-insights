@@ -1,4 +1,4 @@
-// backend/src/routes/userRoutes.ts
+// src/routes/userRoutes.ts
 
 import { Router } from 'express';
 import {
