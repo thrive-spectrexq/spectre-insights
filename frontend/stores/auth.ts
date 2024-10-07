@@ -1,4 +1,3 @@
-// frontend/stores/auth.ts
 import { defineStore } from 'pinia';
 
 interface User {
@@ -10,24 +9,33 @@ interface User {
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        token: localStorage.getItem('token') || '',
+        token: '',
         user: null as User | null,
     }),
     getters: {
         isAuthenticated: (state) => !!state.token,
     },
     actions: {
+        initializeStore() {
+            if (process.client) { // Check if running in client
+                this.token = localStorage.getItem('token') || '';
+                // Optionally, fetch user profile if token exists
+                if (this.token) {
+                    this.fetchUserProfile();
+                }
+            }
+        },
         async login(email: string, password: string) {
             try {
-                const { data } = await useFetch('/api/users/login', {
+                const data = await useNuxtApp().$apiFetch('/users/login', {
                     method: 'POST',
-                    body: { email, password },
-                    credentials: 'include', // If you're using cookies for authentication
+                    body: JSON.stringify({ email, password }),
                 });
 
-                this.token = data.value.token;
-                localStorage.setItem('token', this.token);
-                // Fetch user profile
+                this.token = data.token;
+                if (process.client) { // Check if running in client
+                    localStorage.setItem('token', this.token);
+                }
                 await this.fetchUserProfile();
             } catch (error) {
                 throw error;
@@ -35,15 +43,15 @@ export const useAuthStore = defineStore('auth', {
         },
         async register(name: string, email: string, password: string) {
             try {
-                const { data } = await useFetch('/api/users/register', {
+                const data = await useNuxtApp().$apiFetch('/users/register', {
                     method: 'POST',
-                    body: { name, email, password },
-                    credentials: 'include', // If you're using cookies for authentication
+                    body: JSON.stringify({ name, email, password }),
                 });
 
-                this.token = data.value.token;
-                localStorage.setItem('token', this.token);
-                // Fetch user profile
+                this.token = data.token;
+                if (process.client) { // Check if running in client
+                    localStorage.setItem('token', this.token);
+                }
                 await this.fetchUserProfile();
             } catch (error) {
                 throw error;
@@ -51,12 +59,10 @@ export const useAuthStore = defineStore('auth', {
         },
         async fetchUserProfile() {
             try {
-                const { data } = await useFetch('/api/users/profile', {
+                const data = await useNuxtApp().$apiFetch('/users/profile', {
                     method: 'GET',
-                    credentials: 'include', // If you're using cookies for authentication
                 });
-
-                this.user = data.value;
+                this.user = data;
             } catch (error) {
                 throw error;
             }
@@ -64,7 +70,9 @@ export const useAuthStore = defineStore('auth', {
         logout() {
             this.token = '';
             this.user = null;
-            localStorage.removeItem('token');
+            if (process.client) { // Check if running in client
+                localStorage.removeItem('token');
+            }
         },
     },
 });
