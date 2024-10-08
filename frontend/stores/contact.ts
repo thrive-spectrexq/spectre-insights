@@ -1,4 +1,6 @@
+// stores/contact.ts
 import { defineStore } from 'pinia';
+import { useRuntimeConfig } from '#app'; // Import useRuntimeConfig
 
 interface ContactForm {
     name: string;
@@ -9,8 +11,9 @@ interface ContactForm {
 export const useContactStore = defineStore('contact', {
     actions: {
         async sendMessage(form: ContactForm) {
+            const config = useRuntimeConfig(); // Access runtime config
             try {
-                const { data } = await useFetch('/api/contact', {
+                const { data } = await useFetch(`${config.public.API_BASE_URL}/contact`, { // Use runtime config
                     method: 'POST',
                     body: form,
                     credentials: 'include', // Include cookies if necessary

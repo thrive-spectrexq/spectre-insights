@@ -1,8 +1,11 @@
+// plugins/axios.ts
 import { defineNuxtPlugin } from '#app';
 import { useAuthStore } from '@/stores/auth';
+import { useRuntimeConfig } from '#app'; // Import useRuntimeConfig
 
 export default defineNuxtPlugin((nuxtApp) => {
     const authStore = useAuthStore();
+    const config = useRuntimeConfig(); // Access runtime config
 
     // Function to make requests
     const apiFetch = async (url: string, options = {}) => {
@@ -19,7 +22,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
 
         // Make the fetch request
-        const response = await fetch(`${process.env.API_BASE_URL}${url}`, {
+        const response = await fetch(`${config.public.API_BASE_URL}${url}`, { // Use runtime config
             ...options,
             headers,
         });

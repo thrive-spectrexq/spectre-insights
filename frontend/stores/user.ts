@@ -1,5 +1,7 @@
+// stores/user.ts
 import { defineStore } from 'pinia';
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#app'; // Import useRuntimeConfig
 
 interface User {
     id: string;
@@ -21,11 +23,13 @@ export const useUserStore = defineStore('user', () => {
         }
     });
 
+    const config = useRuntimeConfig(); // Access runtime config
+
     const signup = async (name: string, email: string, password: string) => {
         loading.value = true;
         error.value = null;
         try {
-            const { data } = await useFetch(`${process.env.API_BASE_URL}/users/register`, {
+            const { data } = await useFetch(`${config.public.API_BASE_URL}/users/register`, { // Use runtime config
                 method: 'POST',
                 body: { name, email, password },
                 credentials: 'include',
@@ -47,7 +51,7 @@ export const useUserStore = defineStore('user', () => {
         loading.value = true;
         error.value = null;
         try {
-            const { data } = await useFetch(`${process.env.API_BASE_URL}/users/login`, {
+            const { data } = await useFetch(`${config.public.API_BASE_URL}/users/login`, { // Use runtime config
                 method: 'POST',
                 body: { email, password },
                 credentials: 'include',
@@ -78,7 +82,7 @@ export const useUserStore = defineStore('user', () => {
         loading.value = true;
         error.value = null;
         try {
-            const { data } = await useFetch(`${process.env.API_BASE_URL}/users/profile`, {
+            const { data } = await useFetch(`${config.public.API_BASE_URL}/users/profile`, { // Use runtime config
                 method: 'GET',
                 credentials: 'include',
             });
