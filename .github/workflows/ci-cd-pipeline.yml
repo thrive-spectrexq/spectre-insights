@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js for Frontend
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.16.0'
           cache: 'npm'
 
       - name: Install Frontend Dependencies
@@ -66,7 +66,7 @@ jobs:
       - name: Set up Node.js for Backend
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.16.0'
           cache: 'npm'
 
       - name: Install Backend Dependencies
