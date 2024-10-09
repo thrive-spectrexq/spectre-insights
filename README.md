@@ -25,7 +25,6 @@
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
 
 ---
 
@@ -78,7 +77,7 @@
 - **Containerization:** Docker
 - **CI/CD:** GitHub Actions
 - **Deployment:** Vercel or Netlify (Frontend), Heroku, AWS, or DigitalOcean (Backend)
-- **Testing:** Jest, Supertest
+- **Testing:** Supertest
 
 ---
 
@@ -150,7 +149,7 @@
 
 - Spectre Insights uses Docker for containerization, ensuring consistent environments across development and production.
 
-### Prerequisites
+## Prerequisites
 
 - **Docker**: Ensure Docker is installed and running on your machine.
 
