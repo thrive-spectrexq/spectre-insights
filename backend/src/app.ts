@@ -17,10 +17,10 @@ import logger from './utils/logger'; // Import logger
 
 const app: Application = express();
 
-// 1. Security Middleware
+// Security Middleware
 app.use(helmet());
 
-// 2. Rate Limiting Middleware
+// Rate Limiting Middleware
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
@@ -28,31 +28,31 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// 3. CORS Middleware
+// CORS Middleware
 app.use(cors({
   origin: 'http://localhost:3000', // Allow frontend URL
   credentials: true, // Allow credentials (e.g., cookies) to be included
 }));
 
-// 4. Body Parsing Middleware
+// Body Parsing Middleware
 app.use(express.json());
 
-// 5. Routes
+// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/content', contentRoutes);
 
-// 6. Root Route
+// Root Route
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Spectre Insights API');
 });
 
-// 7. Error Handling Middleware
+// Error Handling Middleware
 app.use(errorHandler);
 
-// 8. Connect to MongoDB and start the server
+// Connect to MongoDB and start the server
 const PORT: number = config.port;
 const MONGO_URI: string = config.mongodb.uri;
 
@@ -69,7 +69,7 @@ mongoose
     process.exit(1); // Exit the process with failure
   });
 
-// 9. Graceful Shutdown
+// Graceful Shutdown
 process.on('unhandledRejection', (reason: any, promise) => {
   logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
   mongoose.disconnect().then(() => {

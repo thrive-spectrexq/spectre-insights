@@ -64,7 +64,7 @@
         </svg>
         <div>
           <h3 class="text-lg font-medium">Email</h3>
-          <p>contact@spectreinsights.com</p>
+          <p>info@spectreinsights.com</p>
         </div>
       </div>
     </div>

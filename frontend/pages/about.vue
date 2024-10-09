@@ -6,7 +6,7 @@
       <h2 class="text-2xl font-semibold mb-2">Our History</h2>
       <p>
         <!-- Company history content -->
-        Spectre Insights was founded in 2020 with a mission to provide top-notch services to our clients...
+        Spectre Insights was founded in 2022 with a mission to provide top-notch services to our clients...
       </p>
     </section>
     <section class="mb-8">
@@ -28,7 +28,7 @@
     </section>
     <section>
       <h2 class="text-2xl font-semibold mb-2">Contact Information</h2>
-      <p>Email: contact@spectreinsights.com</p>
+      <p>Email: info@spectreinsights.com</p>
       <p>Phone: +1 (555) 123-4567</p>
       <!-- Optional: Add an interactive map here -->
     </section>
@@ -42,13 +42,13 @@ import { ref } from 'vue';
 const teamMembers = ref([
   {
     id: 1,
-    name: 'John Doe',
+    name: 'Bright Spectre',
     position: 'CEO',
     photo: '/images/team/john_doe.jpg',
   },
   {
     id: 2,
-    name: 'Jane Smith',
+    name: 'Bright Spectre',
     position: 'CTO',
     photo: '/images/team/jane_smith.jpg',
   },
