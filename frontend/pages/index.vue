@@ -1,7 +1,6 @@
 <template>
   <div>
     <HeroSection />
-    <Testimonials />
     <LatestBlogPosts />
     <CTASection />
   </div>
@@ -9,7 +8,6 @@
 
 <script setup lang="ts">
 import HeroSection from '~/components/HeroSection.vue';
-import Testimonials from '~/components/Testimonials.vue';
 import LatestBlogPosts from '~/components/LatestBlogPosts.vue';
 import CTASection from '~/components/CTASection.vue';
 </script>

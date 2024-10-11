@@ -24,6 +24,9 @@
               <NuxtLink to="/contact" class="hover:underline">Contact</NuxtLink>
             </li>
             <li class="mb-1">
+              <NuxtLink to="/resources" class="hover:underline">Resources</NuxtLink> <!-- New Resources Link -->
+            </li>
+            <li class="mb-1">
               <NuxtLink to="/terms-of-service" class="hover:underline">Terms of Service</NuxtLink>
             </li>
             <li class="mb-1">
@@ -45,13 +48,13 @@
               <svg class="h-5 w-5 mr-2 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <span>info@spectreinsights.com</span>
+              <span>info@spectreinsights.net</span>
             </li>
             <li class="mb-1 flex items-center">
               <svg class="h-5 w-5 mr-2 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h2a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h2" />
               </svg>
-              <span>+1 (555) 123-4567</span>
+              <span>+233 55 041-6018</span>
             </li>
           </ul>
         </div>

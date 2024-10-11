@@ -44,7 +44,7 @@
         </svg>
         <div>
           <h3 class="text-lg font-medium">Phone</h3>
-          <p>+1 (234) 567-8901</p>
+          <p>+233 55 014-6018</p>
         </div>
       </div>
       <div class="flex items-center">
@@ -64,7 +64,7 @@
         </svg>
         <div>
           <h3 class="text-lg font-medium">Email</h3>
-          <p>info@spectreinsights.com</p>
+          <p>info@spectreinsights.net</p>
         </div>
       </div>
     </div>

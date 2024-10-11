@@ -79,7 +79,7 @@
           If you have any questions about these Terms, please contact us:
         </p>
         <ul class="list-disc list-inside">
-          <li>By email: support@spectreinsights.com</li>
+          <li>By email: support@spectreinsights.net</li>
           <li>By visiting this page on our website: [Contact Page URL]</li>
           <li>By phone number: [Your Phone Number]</li>
         </ul>
