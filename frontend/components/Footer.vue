@@ -5,7 +5,7 @@
         <!-- Company Info -->
         <div class="mb-6 md:mb-0">
           <h3 class="text-xl font-semibold">Spectre Insights</h3>
-          <p class="mt-2">Empowering your digital experience with data-driven solutions.</p>
+          <p class="mt-2">Harnessing the Power of AI and Technology</p>
         </div>
         <!-- Quick Links -->
         <div class="mb-6 md:mb-0">

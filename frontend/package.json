@@ -12,10 +12,10 @@
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.5",
-    "@sidebase/nuxt-auth": "^0.9.3",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
+    "@types/three": "^0.169.0",
     "@vee-validate/rules": "^4.13.2",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
@@ -25,6 +25,7 @@
     "jwt-decode": "^4.0.0",
     "nuxt": "^3.13.2",
     "pinia": "^2.0.0",
+    "three": "^0.169.0",
     "vee-validate": "^4.13.2",
     "vue3-leaflet": "^1.0.50",
     "yup": "^1.4.0"

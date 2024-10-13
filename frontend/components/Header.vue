@@ -11,7 +11,7 @@
         <NuxtLink to="/products" class="mx-2 text-gray-700 hover:text-indigo-600">Products</NuxtLink>
         <NuxtLink to="/resources" class="mx-2 text-gray-700 hover:text-indigo-600">Resources</NuxtLink> <!-- New Resources Link -->
         <NuxtLink to="/signin" class="mx-2 text-gray-700 hover:text-indigo-600">Sign In</NuxtLink>
-        <NuxtLink to="/signup" class="mx-2 text-gray-700 hover:text-indigo-600">Create Account</NuxtLink>
+        <NuxtLink to="/signup" class="mx-2 text-gray-700 hover:text-indigo-600">Create an Account</NuxtLink>
       </nav>
     </div>
   </header>

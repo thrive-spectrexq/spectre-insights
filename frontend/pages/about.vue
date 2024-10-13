@@ -4,9 +4,9 @@
 
     <!-- Our Mission Section -->
     <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">Our Mission</h2>
+      <h2 class="text-2xl font-semibold mb-2">Mission</h2>
       <p>
-        Empowering your digital experience with data-driven solutions.
+        Harnessing the Power of AI and Technology.
       </p>
     </section>
 
