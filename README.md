@@ -159,7 +159,6 @@
   ```bash
   cd spectre-insights
 
-
 2. **Build and Start Containers**
 
   ```bash
