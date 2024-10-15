@@ -156,19 +156,19 @@
 
 1. **Navigate to the Root Directory**
 
-  ```bash
-  cd spectre-insights
+    ```bash
+    cd spectre-insights
+    ```
 
 2. **Build and Start Containers**
 
-  ```bash
-  docker-compose up --build
+    ```bash
+    docker-compose up --build
+    ```
 
-
-- This command will build the Docker images for both the frontend and backend, along with the MongoDB service, and start the containers.
+    - This command will build the Docker images for both the frontend and backend, along with the MongoDB service, and start the containers.
 
 3. **Access the Application**
 
-  ```bash
-  Frontend: http://localhost:3000
-  Backend API: http://localhost:5000/api
+    - Frontend: [http://localhost:3000](http://localhost:3000)
+    - Backend API: [http://localhost:5000/api](http://localhost:5000/api)
