@@ -24,9 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useAuthStore } from '@/stores/auth';
 import Notification from '@/components/Notification.vue'; // Import Notification component
+import { useAuthStore } from '@/stores/auth';
+import { ref } from 'vue';
 
 const authStore = useAuthStore();
 
@@ -51,7 +51,7 @@ const handleSignout = () => {
         message: 'You have been signed out.',
       };
     })
-    .catch((error) => {
+    .catch((error: { message: string; }) => {
       // Set notification for sign-out error
       notification.value = {
         visible: true,

@@ -1,8 +1,9 @@
 // frontend/plugins/auth.ts
 
 import { useAuthStore } from '@/stores/auth';
+import { defineNuxtPlugin } from 'nuxt/app';
 
-export default defineNuxtPlugin(async (nuxtApp) => {
+export default defineNuxtPlugin(async () => {
     const authStore = useAuthStore();
 
     // Check if the user is authenticated and fetch the user profile

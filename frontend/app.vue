@@ -1,5 +1,4 @@
 <!-- frontend/app.vue -->
-
 <template>
   <DefaultLayout>
     <NuxtPage />
@@ -7,32 +6,28 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth';
-import DefaultLayout from '~/layouts/default.vue'; // Import your default layout
 import { onMounted } from 'vue';
+import DefaultLayout from '~/layouts/default.vue'; // Import your default layout
+import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
 
 // Fetch user profile on app mount
 onMounted(async () => {
-  // Initialize store to get token from localStorage
   authStore.initializeStore(); 
-  
-  // Fetch user profile if token exists
-  if (authStore.token) {
+
+  if (authStore.token && !authStore.user) { // Avoid redundant API calls
     try {
       await authStore.fetchUserProfile();
     } catch (error) {
       console.error('Failed to fetch user profile:', error);
-      // Optionally, handle the error (e.g., redirect to login page)
+      authStore.logout(); // Clear token if profile fetch fails
+      window.location.href = '/login'; // Redirect to login
     }
   }
 });
-
-// Import global styles
-import '~/assets/css/tailwind.css';
 </script>
 
 <style>
-/* Global styles if any */
+/* Add any global styles if necessary */
 </style>

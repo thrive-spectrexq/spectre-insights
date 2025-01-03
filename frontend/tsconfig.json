@@ -9,15 +9,15 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true, // Use this only when you need to bypass third-party library issues
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@nuxt/types", "@nuxt/app"]
+    "types": ["@nuxt/schema"]
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist", ".nuxt", "build"],
   "include": ["**/*.ts", "**/*.d.ts", "**/*.vue"]
 }

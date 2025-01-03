@@ -1,7 +1,7 @@
-// stores/blog.ts
+import { useRuntimeConfig } from '#app'; // Import useRuntimeConfig
+import { useFetch } from 'nuxt/app';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { useRuntimeConfig } from '#app'; // Import useRuntimeConfig
 
 interface BlogPost {
     id: string;
@@ -17,14 +17,14 @@ export const useBlogStore = defineStore('blog', () => {
     const loading = ref<boolean>(false);
     const error = ref<string | null>(null);
 
-    // Fetch all blog posts
+    // Fetch all blog posts from MongoDB-connected backend API
     const fetchPosts = async () => {
         loading.value = true;
         error.value = null;
         const config = useRuntimeConfig(); // Access runtime config
 
         try {
-            const { data } = await useFetch(`${config.public.API_BASE_URL}/blogs`, { // Use runtime config
+            const { data } = await useFetch(`${config.public.MONGO_URI}/blog`, {
                 method: 'GET',
                 credentials: 'include', // Include cookies if necessary
             });
@@ -43,9 +43,8 @@ export const useBlogStore = defineStore('blog', () => {
         const config = useRuntimeConfig(); // Access runtime config
 
         try {
-            const { data } = await useFetch(`${config.public.API_BASE_URL}/blogs/search`, { // Use runtime config
+            const { data } = await useFetch(`${config.public.MONGO_URI}/blog?q=${query}`, {
                 method: 'GET',
-                params: { q: query },
                 credentials: 'include', // Include cookies if necessary
             });
             posts.value = data.value; // Adjust based on the actual response structure

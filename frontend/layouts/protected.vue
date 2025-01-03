@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { definePageMeta } from 'nuxt/dist/pages/runtime';
 import Header from '~/components/Header.vue';
 
 // Define the middleware to protect this layout
