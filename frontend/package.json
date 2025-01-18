@@ -24,7 +24,7 @@
     "axios-retry": "^4.5.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
-    "mongoose": "^8.9.3",
+    "mongoose": "^8.9.5",
     "nuxt": "^3.13.2",
     "pinia": "^2.0.0",
     "three": "^0.169.0",
