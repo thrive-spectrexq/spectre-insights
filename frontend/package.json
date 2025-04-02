@@ -20,7 +20,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/head": "^2.0.0",
-    "axios": "^1.7.7",
+    "axios": "^1.8.4",
     "axios-retry": "^4.5.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
